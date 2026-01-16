@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * Repository for ApplicationEntity aggregate root.
  */
-interface ApplicationRepository extends JpaRepository<ApplicationEntity, ApplicationId> {
+public interface ApplicationRepository extends JpaRepository<ApplicationEntity, ApplicationId> {
 
     @Query("""
             SELECT a FROM ApplicationEntity a

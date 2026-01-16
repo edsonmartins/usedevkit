@@ -1,11 +1,15 @@
 package com.devkit.featureFlags.domain;
 
+import com.devkit.featureFlags.domain.events.FeatureFlagCreatedEvent;
+import com.devkit.featureFlags.domain.events.FeatureFlagDeletedEvent;
+import com.devkit.featureFlags.domain.events.FeatureFlagDisabledEvent;
+import com.devkit.featureFlags.domain.events.FeatureFlagEnabledEvent;
+import com.devkit.featureFlags.domain.events.FeatureFlagUpdatedEvent;
+import com.devkit.featureFlags.domain.vo.FeatureFlagId;
 import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.shared.domain.SpringEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
 
 /**
  * Command Service for Feature Flag write operations.
@@ -38,10 +42,10 @@ public class FeatureFlagCommandService {
                 });
 
         var status = cmd.status() != null ?
-                FlagStatus.valueOf(cmd.status().toUpperCase()) : FlagStatus.DISABLED;
+                FeatureFlagEntity.FlagStatus.valueOf(cmd.status().toUpperCase()) : FeatureFlagEntity.FlagStatus.DISABLED;
 
         var strategy = cmd.rolloutStrategy() != null ?
-                RolloutStrategy.valueOf(cmd.rolloutStrategy().toUpperCase()) : RolloutStrategy.ALL;
+                FeatureFlagEntity.RolloutStrategy.valueOf(cmd.rolloutStrategy().toUpperCase()) : FeatureFlagEntity.RolloutStrategy.ALL;
 
         var featureFlag = new FeatureFlagEntity(
                 FeatureFlagId.generate(),
@@ -77,19 +81,18 @@ public class FeatureFlagCommandService {
                         "Feature flag not found with id: " + cmd.featureFlagId()));
 
         if (cmd.name() != null && !cmd.name().isBlank()) {
-            featureFlag.setName(cmd.name());
+            featureFlag.updateName(cmd.name());
         }
 
         if (cmd.description() != null) {
-            // Precisamos adicionar um setter na entidade
-            // featureFlag.setDescription(cmd.description());
+            featureFlag.updateDescription(cmd.description());
         }
 
         if (cmd.status() != null) {
-            var status = FlagStatus.valueOf(cmd.status().toUpperCase());
-            if (status == FlagStatus.ENABLED) {
+            var status = FeatureFlagEntity.FlagStatus.valueOf(cmd.status().toUpperCase());
+            if (status == FeatureFlagEntity.FlagStatus.ENABLED) {
                 featureFlag.enable();
-            } else if (status == FlagStatus.DISABLED) {
+            } else if (status == FeatureFlagEntity.FlagStatus.DISABLED) {
                 featureFlag.disable();
             }
         }

@@ -3,7 +3,7 @@ package com.devkit.configurations.rest;
 import com.devkit.configurations.domain.ConfigurationEntity.ConfigType;
 import com.devkit.configurations.domain.ConfigurationResult;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * REST Response for configuration data.
@@ -17,8 +17,8 @@ public record ConfigurationResponse(
     Boolean isSecret,
     String environmentId,
     Integer versionNumber,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Instant createdAt,
+    Instant updatedAt
 ) {
     public static ConfigurationResponse from(ConfigurationResult result) {
         return new ConfigurationResponse(

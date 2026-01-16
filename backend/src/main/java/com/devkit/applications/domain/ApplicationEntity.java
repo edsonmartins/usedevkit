@@ -84,6 +84,10 @@ public class ApplicationEntity extends BaseEntity {
         this.description = description;
     }
 
+    public void updateName(String name) {
+        this.name = AssertUtil.requireNotBlank(name, "Application name cannot be null or empty");
+    }
+
     public boolean isActive() {
         return this.isActive;
     }

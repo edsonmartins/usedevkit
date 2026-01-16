@@ -56,6 +56,20 @@ public class SecretController {
             .body(SecretResponse.from(result));
     }
 
+    @GetMapping
+    @Operation(summary = "Get active secrets", description = "Retrieves all active secrets")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Secrets retrieved successfully")
+    })
+    ResponseEntity<List<SecretResponse>> getActiveSecrets() {
+        var secrets = queryService.getAllActiveSecrets();
+        var responses = secrets.stream()
+            .map(SecretResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(responses);
+    }
+
     @GetMapping("/application/{applicationId}")
     @Operation(summary = "Get secrets by application", description = "Retrieves all active secrets for an application")
     @ApiResponses(value = {
@@ -134,6 +148,29 @@ public class SecretController {
         commandService.rotateSecret(cmd);
         var result = queryService.getSecretById(id);
 
+        return ResponseEntity.ok(SecretResponse.from(result));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a secret", description = "Updates secret metadata and rotation policy")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Secret updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input"),
+        @ApiResponse(responseCode = "404", description = "Secret not found")
+    })
+    ResponseEntity<SecretResponse> updateSecret(
+            @PathVariable String id,
+            @Valid @RequestBody UpdateSecretRequest request) {
+        var cmd = new UpdateSecretCmd(
+            id,
+            request.encryptedValue(),
+            request.description(),
+            request.rotationPolicy(),
+            request.applicationId(),
+            request.environmentId()
+        );
+        commandService.updateSecret(cmd);
+        var result = queryService.getSecretById(id);
         return ResponseEntity.ok(SecretResponse.from(result));
     }
 

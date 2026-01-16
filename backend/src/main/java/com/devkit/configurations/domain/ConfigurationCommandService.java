@@ -72,11 +72,11 @@ public class ConfigurationCommandService {
 
         // Create version history before updating
         var version = ConfigurationVersionEntity.create(
-                configuration.getKey(),
+                configuration.getVersionNumber(),
                 configuration.getValue(),
-                configuration.getType(),
-                configuration.getDescription(),
-                configuration.getVersionNumber()
+                "UPDATE",
+                "SYSTEM",
+                configuration
         );
         configuration.addVersion(version);
 

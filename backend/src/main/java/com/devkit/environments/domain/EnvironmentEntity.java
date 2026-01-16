@@ -1,5 +1,6 @@
 package com.devkit.environments.domain;
 
+import com.devkit.configurations.domain.ConfigurationEntity;
 import com.devkit.environments.domain.vo.EnvironmentId;
 import com.devkit.shared.domain.AssertUtil;
 import com.devkit.shared.domain.BaseEntity;

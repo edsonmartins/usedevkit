@@ -33,6 +33,11 @@ public class WebhookEntity extends BaseEntity {
         SECRET_EXPIRED
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
+
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
@@ -192,6 +197,10 @@ public class WebhookEntity extends BaseEntity {
     }
 
     // Getters
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

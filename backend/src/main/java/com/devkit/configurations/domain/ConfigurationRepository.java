@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * Repository for ConfigurationEntity aggregate root.
  */
-interface ConfigurationRepository extends JpaRepository<ConfigurationEntity, ConfigurationId> {
+public interface ConfigurationRepository extends JpaRepository<ConfigurationEntity, ConfigurationId> {
 
     @Query("""
             SELECT c FROM ConfigurationEntity c

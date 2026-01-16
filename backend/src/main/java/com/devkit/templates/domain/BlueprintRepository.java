@@ -12,7 +12,7 @@ import java.util.Optional;
  * Repository for BlueprintEntity.
  */
 @Repository
-public interface BlueprintRepository extends JpaRepository<BlueprintEntity, Long> {
+public interface BlueprintRepository extends JpaRepository<BlueprintEntity, String> {
 
     /**
      * Find active blueprints.
@@ -38,7 +38,7 @@ public interface BlueprintRepository extends JpaRepository<BlueprintEntity, Long
      * Find blueprint with configs.
      */
     @Query("SELECT b FROM BlueprintEntity b LEFT JOIN FETCH b.configs WHERE b.id = :id")
-    Optional<BlueprintEntity> findByIdWithConfigs(@Param("id") Long id);
+    Optional<BlueprintEntity> findByIdWithConfigs(@Param("id") String id);
 
     /**
      * Count by status.

@@ -158,8 +158,8 @@ public class TenantService {
     public TenantDTO upgradePlan(Long id, TenantEntity.TenantPlan newPlan) {
         TenantEntity tenant = getTenant(id);
 
-        Integer newMaxUsers = getMaxUsersForPlan(newPlan);
-        Integer newMaxApps = getMaxApplicationsForPlan(newPlan);
+        Integer newMaxUsers = getMaxUsersForPlan(mapPlanToDto(newPlan));
+        Integer newMaxApps = getMaxApplicationsForPlan(mapPlanToDto(newPlan));
 
         tenant.upgradePlan(newPlan, newMaxUsers, newMaxApps);
 
@@ -221,8 +221,17 @@ public class TenantService {
         };
     }
 
+    private CreateTenantDTO.TenantPlanDTO mapPlanToDto(TenantEntity.TenantPlan plan) {
+        return switch (plan) {
+            case FREE -> CreateTenantDTO.TenantPlanDTO.FREE;
+            case STARTER -> CreateTenantDTO.TenantPlanDTO.STARTER;
+            case PROFESSIONAL -> CreateTenantDTO.TenantPlanDTO.PROFESSIONAL;
+            case ENTERPRISE -> CreateTenantDTO.TenantPlanDTO.ENTERPRISE;
+        };
+    }
+
     private TenantDTO mapToDTO(TenantEntity entity) {
-        Integer userCount = tenantUserRepository.countByTenantId(entity.getId());
+        Integer userCount = Math.toIntExact(tenantUserRepository.countByTenantId(entity.getId()));
 
         return new TenantDTO(
             entity.getId(),

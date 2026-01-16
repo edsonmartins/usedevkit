@@ -2,7 +2,7 @@ package com.devkit.environments.rest;
 
 import com.devkit.environments.domain.EnvironmentResult;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * REST Response for environment data.
@@ -14,8 +14,8 @@ public record EnvironmentResponse(
     String applicationId,
     String color,
     String inheritFromId,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Instant createdAt,
+    Instant updatedAt
 ) {
     public static EnvironmentResponse from(EnvironmentResult result) {
         return new EnvironmentResponse(

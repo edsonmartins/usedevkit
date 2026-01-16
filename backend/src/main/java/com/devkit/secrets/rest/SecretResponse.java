@@ -4,7 +4,6 @@ import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 import com.devkit.secrets.domain.SecretResult;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * REST Response for secret data (without decrypted value).
@@ -20,8 +19,8 @@ public record SecretResponse(
     Instant nextRotationDate,
     Boolean isActive,
     Integer versionNumber,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Instant createdAt,
+    Instant updatedAt
 ) {
     public static SecretResponse from(SecretResult result) {
         return new SecretResponse(

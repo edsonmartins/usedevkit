@@ -12,6 +12,11 @@ import jakarta.persistence.*;
 @Table(name = "promotion_diffs")
 public class PromotionDiffEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
+    private String id;
+
     @Column(name = "promotion_request_id", nullable = false, length = 255)
     private String promotionRequestId;
 
@@ -75,6 +80,10 @@ public class PromotionDiffEntity extends BaseEntity {
         this.sourceVersion = AssertUtil.requireNotNull(sourceVersion, "Source version cannot be null");
         this.targetVersion = AssertUtil.requireNotNull(targetVersion, "Target version cannot be null");
         this.changeType = AssertUtil.requireNotNull(changeType, "Change type cannot be null");
+    }
+
+    public String getId() {
+        return id;
     }
 
     // Factory methods

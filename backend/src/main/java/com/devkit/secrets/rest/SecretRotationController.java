@@ -4,6 +4,8 @@ import com.devkit.secrets.domain.SecretEntity;
 import com.devkit.secrets.domain.SecretRepository;
 import com.devkit.secrets.domain.SecretRotationEntity;
 import com.devkit.secrets.domain.SecretRotationRepository;
+import com.devkit.secrets.domain.SecretRotationScheduler;
+import com.devkit.secrets.domain.vo.SecretId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -45,7 +47,7 @@ public class SecretRotationController {
     })
     ResponseEntity<List<SecretRotationResponse>> getRotationHistory(@PathVariable String secretId) {
         // Verify secret exists
-        if (!secretRepository.existsById(secretId)) {
+        if (!secretRepository.existsById(SecretId.of(secretId))) {
             return ResponseEntity.notFound().build();
         }
 
@@ -114,14 +116,14 @@ public class SecretRotationController {
         details.put("expiringSoon", expiringSoon.size());
 
         return ResponseEntity.ok(new ValidationResponse(
-            needsRotation.stream().map(s -> Map.of(
+            needsRotation.stream().map(s -> Map.<String, Object>of(
                 "id", s.getId().id(),
                 "key", s.getKey(),
                 "applicationId", s.getApplicationId(),
                 "environmentId", s.getEnvironmentId(),
                 "nextRotationDate", s.getNextRotationDate()
             )).toList(),
-            expiringSoon.stream().map(s -> Map.of(
+            expiringSoon.stream().map(s -> Map.<String, Object>of(
                 "id", s.getId().id(),
                 "key", s.getKey(),
                 "applicationId", s.getApplicationId(),

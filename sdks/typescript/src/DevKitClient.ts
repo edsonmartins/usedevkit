@@ -75,12 +75,24 @@ export class DevKitClient {
 
   // ==================== Configurations ====================
 
-  async getConfig(environmentId: string, key: string): Promise<string> {
+  async getConfig(environmentId: string, key: string): Promise<string>;
+  async getConfig<T extends string | number | boolean>(
+    environmentId: string,
+    key: string,
+    type: 'string' | 'number' | 'boolean'
+  ): Promise<T>;
+  async getConfig<T extends string | number | boolean>(
+    environmentId: string,
+    key: string,
+    type?: 'string' | 'number' | 'boolean'
+  ): Promise<string | T> {
     const cacheKey = `config:${environmentId}:${key}`;
 
     if (this.cacheEnabled && this.cache) {
       const cached = this.cache.get<string>(cacheKey);
-      if (cached !== undefined) return cached;
+      if (cached !== undefined) {
+        return this.convertConfigValue<T>(cached, type);
+      }
     }
 
     const config = await this.httpClient.get<Configuration>(
@@ -91,15 +103,14 @@ export class DevKitClient {
       this.cache.set(cacheKey, config.value);
     }
 
-    return config.value;
+    return this.convertConfigValue<T>(config.value, type);
   }
 
-  async getConfig<T extends string | number | boolean>(
-    environmentId: string,
-    key: string,
-    type: 'string' | 'number' | 'boolean'
-  ): Promise<T> {
-    const value = await this.getConfig(environmentId, key);
+  private convertConfigValue<T extends string | number | boolean>(
+    value: string,
+    type?: 'string' | 'number' | 'boolean'
+  ): string | T {
+    if (!type) return value;
 
     switch (type) {
       case 'string':

@@ -3,7 +3,6 @@ package com.devkit.secrets.domain;
 import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * Result DTO for secret queries with decrypted value.
@@ -20,8 +19,8 @@ public record SecretResultWithDecrypted(
     Instant nextRotationDate,
     Boolean isActive,
     Integer versionNumber,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Instant createdAt,
+    Instant updatedAt
 ) {
     public static SecretResultWithDecrypted from(SecretEntity entity, String decryptedValue) {
         return new SecretResultWithDecrypted(

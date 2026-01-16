@@ -1,11 +1,14 @@
 package com.devkit.applications.domain;
 
+import com.devkit.applications.domain.events.ApplicationActivatedEvent;
+import com.devkit.applications.domain.events.ApplicationCreatedEvent;
+import com.devkit.applications.domain.events.ApplicationDeactivatedEvent;
+import com.devkit.applications.domain.events.ApplicationDeletedEvent;
+import com.devkit.applications.domain.events.ApplicationUpdatedEvent;
 import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.shared.domain.SpringEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Command Service for Application write operations.
@@ -69,7 +72,7 @@ public class ApplicationCommandService {
                     .ifPresent(existing -> {
                         throw new IllegalArgumentException("Application with name '" + cmd.name() + "' already exists");
                     });
-            application.setName(cmd.name());
+            application.updateName(cmd.name());
         }
 
         application.updateDescription(cmd.description());

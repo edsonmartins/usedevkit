@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * Repository for SecretEntity aggregate root.
  */
-interface SecretRepository extends JpaRepository<SecretEntity, SecretId> {
+public interface SecretRepository extends JpaRepository<SecretEntity, SecretId> {
 
     @Query("""
             SELECT s FROM SecretEntity s
@@ -22,6 +22,10 @@ interface SecretRepository extends JpaRepository<SecretEntity, SecretId> {
             ORDER BY s.key ASC
             """)
     List<SecretEntity> findActiveByApplicationId(@Param("applicationId") String applicationId);
+
+    List<SecretEntity> findByApplicationId(String applicationId);
+
+    List<SecretEntity> findByIsActiveTrue();
 
     @Query("""
             SELECT s FROM SecretEntity s
@@ -52,6 +56,10 @@ interface SecretRepository extends JpaRepository<SecretEntity, SecretId> {
             AND s.nextRotationDate <= :date
             """)
     List<SecretEntity> findSecretsNeedingRotation(@Param("date") Instant date);
+
+    default List<SecretEntity> findSecretsNeedingRotation() {
+        return findSecretsNeedingRotation(Instant.now());
+    }
 
     default SecretEntity getByApplicationIdAndKey(String applicationId, String key) {
         return this.findByApplicationIdAndKey(applicationId, key)

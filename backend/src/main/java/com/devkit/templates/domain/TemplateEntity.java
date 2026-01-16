@@ -16,6 +16,11 @@ import java.util.List;
 @Table(name = "templates")
 public class TemplateEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
+    private String id;
+
     @Column(name = "name", nullable = false, unique = true, length = 255)
     private String name;
 
@@ -110,6 +115,10 @@ public class TemplateEntity extends BaseEntity {
     }
 
     // Getters
+    public String getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

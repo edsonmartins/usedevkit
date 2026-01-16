@@ -50,7 +50,7 @@ public class ConfigurationVersionController {
         ).orElseThrow(() -> new IllegalArgumentException(
                 "Configuration not found with id: " + configurationId));
 
-        List<ConfigurationVersionEntity> versions = List.copyOf(configuration.getVersions());
+        List<ConfigurationVersionEntity> versions = List.copyOf(configuration.getVersionHistory());
 
         List<ConfigurationVersionResponse> responses = versions.stream()
                 .map(ConfigurationVersionResponse::fromEntity)
@@ -80,7 +80,7 @@ public class ConfigurationVersionController {
         ).orElseThrow(() -> new IllegalArgumentException(
                 "Configuration not found with id: " + configurationId));
 
-        ConfigurationVersionEntity version = configuration.getVersions().stream()
+        ConfigurationVersionEntity version = configuration.getVersionHistory().stream()
                 .filter(v -> v.getVersionNumber() == versionNumber)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -111,7 +111,7 @@ public class ConfigurationVersionController {
                 "Configuration not found with id: " + configurationId));
 
         // Find the target version
-        ConfigurationVersionEntity targetVersion = configuration.getVersions().stream()
+        ConfigurationVersionEntity targetVersion = configuration.getVersionHistory().stream()
                 .filter(v -> v.getVersionNumber() == versionNumber)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -119,17 +119,17 @@ public class ConfigurationVersionController {
 
         // Create version history of current state before rollback
         ConfigurationVersionEntity currentVersion = ConfigurationVersionEntity.create(
-                configuration.getKey(),
+                configuration.getVersionNumber(),
                 configuration.getValue(),
-                configuration.getType(),
-                configuration.getDescription(),
-                configuration.getVersionNumber()
+                "ROLLBACK",
+                "SYSTEM",
+                configuration
         );
         configuration.addVersion(currentVersion);
 
         // Restore to target version values
         configuration.updateValue(targetVersion.getValue());
-        configuration.updateType(targetVersion.getType());
+        configuration.updateType(targetVersion.getConfiguration().getType());
 
         configurationRepository.save(configuration);
 

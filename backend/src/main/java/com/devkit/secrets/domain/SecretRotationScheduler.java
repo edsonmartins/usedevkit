@@ -1,9 +1,12 @@
 package com.devkit.secrets.domain;
 
+import com.devkit.secrets.domain.events.SecretRotatedEvent;
+import com.devkit.secrets.domain.vo.SecretId;
 import com.devkit.shared.domain.SpringEventPublisher;
 import com.devkit.shared.security.EncryptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,15 +44,11 @@ public class SecretRotationScheduler {
      *
      * @return Number of secrets rotated
      */
+    @Scheduled(cron = "0 0 2 * * *")
     public int rotateDueSecrets() {
         logger.info("Starting automatic secret rotation check...");
 
-        List<SecretEntity> allSecrets = secretRepository.findAll();
-
-        List<SecretEntity> needsRotation = allSecrets.stream()
-            .filter(SecretEntity::isActive)
-            .filter(SecretEntity::needsRotation)
-            .toList();
+        List<SecretEntity> needsRotation = secretRepository.findSecretsNeedingRotation();
 
         logger.info("Found {} secrets that need rotation", needsRotation.size());
 

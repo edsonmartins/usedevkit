@@ -111,6 +111,34 @@ public class SecretEntity extends BaseEntity {
         calculateNextRotationDate();
     }
 
+    public void updateDetails(
+            String encryptedValue,
+            String description,
+            RotationPolicy rotationPolicy,
+            String applicationId,
+            String environmentId) {
+        if (encryptedValue != null) {
+            this.encryptedValue = encryptedValue;
+        }
+
+        if (description != null) {
+            this.description = description;
+        }
+
+        if (rotationPolicy != null) {
+            this.rotationPolicy = rotationPolicy;
+            calculateNextRotationDate();
+        }
+
+        if (applicationId != null) {
+            this.applicationId = applicationId;
+        }
+
+        if (environmentId != null) {
+            this.environmentId = environmentId;
+        }
+    }
+
     public void deactivate() {
         this.isActive = false;
     }

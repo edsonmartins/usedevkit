@@ -52,7 +52,7 @@ public class FeatureFlagEvaluationController {
                 enabled,
                 variant,
                 flag.rolloutPercentage(),
-                flag.payload()
+                getVariantPayload(flag, variant)
         );
 
         return ResponseEntity.ok(response);
@@ -81,7 +81,7 @@ public class FeatureFlagEvaluationController {
                         enabled,
                         variant,
                         flag.rolloutPercentage(),
-                        flag.payload()
+                        getVariantPayload(flag, variant)
                 );
 
                 evaluations.put(key, response);
@@ -219,11 +219,9 @@ public class FeatureFlagEvaluationController {
         return flag.variants().stream()
                 .filter(v -> v.key().equals(variantKey))
                 .findFirst()
-                .map(FeatureFlagResult.VariantResponse::payload)
+                .map(FeatureFlagResult.VariantResult::payload)
                 .orElse(null);
     }
-
-    private String payload = null;
 }
 
 /**

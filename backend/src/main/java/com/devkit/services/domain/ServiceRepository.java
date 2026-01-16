@@ -83,6 +83,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, ServiceI
      */
     long countByStatus(ServiceEntity.ServiceStatus status);
 
+    long countByIsActiveTrue();
+
     /**
      * Count services by environment.
      */

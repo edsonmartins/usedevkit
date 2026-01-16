@@ -1,6 +1,6 @@
 package com.devkit.environments.domain;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Result DTO for environment queries.
@@ -12,8 +12,8 @@ public record EnvironmentResult(
     String applicationId,
     String color,
     String inheritFromId,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Instant createdAt,
+    Instant updatedAt
 ) {
     public static EnvironmentResult from(EnvironmentEntity entity) {
         return new EnvironmentResult(

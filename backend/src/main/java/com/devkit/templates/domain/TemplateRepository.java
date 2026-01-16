@@ -12,7 +12,7 @@ import java.util.Optional;
  * Repository for TemplateEntity.
  */
 @Repository
-public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> {
+public interface TemplateRepository extends JpaRepository<TemplateEntity, String> {
 
     /**
      * Find active templates.
@@ -39,7 +39,7 @@ public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> 
      * Find template with versions.
      */
     @Query("SELECT t FROM TemplateEntity t LEFT JOIN FETCH t.versions WHERE t.id = :id")
-    Optional<TemplateEntity> findByIdWithVersions(@Param("id") Long id);
+    Optional<TemplateEntity> findByIdWithVersions(@Param("id") String id);
 
     /**
      * Count by status.

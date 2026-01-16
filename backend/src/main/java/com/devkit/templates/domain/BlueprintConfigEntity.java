@@ -12,6 +12,11 @@ import jakarta.persistence.*;
 @Table(name = "blueprint_configs")
 public class BlueprintConfigEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
+    private String id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blueprint_id", nullable = false)
     private BlueprintEntity blueprint;
@@ -20,7 +25,7 @@ public class BlueprintConfigEntity extends BaseEntity {
     private String configKey;
 
     @Column(name = "template_id")
-    private Long templateId; // Optional: inherit from template
+    private String templateId; // Optional: inherit from template
 
     @Column(name = "value_override", columnDefinition = "TEXT")
     private String valueOverride; // Override template default
@@ -41,7 +46,7 @@ public class BlueprintConfigEntity extends BaseEntity {
     public BlueprintConfigEntity(
             BlueprintEntity blueprint,
             String configKey,
-            Long templateId,
+            String templateId,
             String valueOverride,
             String environmentId,
             Boolean isRequired,
@@ -60,7 +65,7 @@ public class BlueprintConfigEntity extends BaseEntity {
     public static BlueprintConfigEntity createWithTemplate(
             BlueprintEntity blueprint,
             String configKey,
-            Long templateId,
+            String templateId,
             String valueOverride) {
 
         return new BlueprintConfigEntity(
@@ -105,6 +110,10 @@ public class BlueprintConfigEntity extends BaseEntity {
     }
 
     // Getters
+    public String getId() {
+        return id;
+    }
+
     public BlueprintEntity getBlueprint() {
         return blueprint;
     }
@@ -113,7 +122,7 @@ public class BlueprintConfigEntity extends BaseEntity {
         return configKey;
     }
 
-    public Long getTemplateId() {
+    public String getTemplateId() {
         return templateId;
     }
 
@@ -142,7 +151,7 @@ public class BlueprintConfigEntity extends BaseEntity {
         this.configKey = configKey;
     }
 
-    public void setTemplateId(Long templateId) {
+    public void setTemplateId(String templateId) {
         this.templateId = templateId;
     }
 

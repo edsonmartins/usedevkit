@@ -9,9 +9,15 @@ import java.time.Instant;
  * Represents a Secret Rotation (audit log of all rotations).
  * Tracks the history of all secret rotations with before/after values.
  */
-@Entity
-@Table(name = "secret_rotations")
-public class SecretRotationEntity extends BaseEntity {
+    @Entity
+    @Table(name = "secret_rotations")
+    public class SecretRotationEntity extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
+    private String id = java.util.UUID.randomUUID().toString();
+
 
     public enum RotationStatus {
         SUCCESS, FAILED, ROLLBACK
@@ -152,6 +158,10 @@ public class SecretRotationEntity extends BaseEntity {
     }
 
     // Getters
+    public String getId() {
+        return id;
+    }
+
     public String getSecretId() {
         return secretId;
     }

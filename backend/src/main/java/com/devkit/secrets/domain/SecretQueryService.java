@@ -40,6 +40,17 @@ public class SecretQueryService {
     }
 
     /**
+     * Get all active secrets.
+     * @return list of secret results (without decrypted values)
+     */
+    public List<SecretResult> getAllActiveSecrets() {
+        return secretRepository.findByIsActiveTrue()
+                .stream()
+                .map(SecretResult::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Get secrets by application and environment.
      * @param applicationId the application ID
      * @param environmentId the environment ID (optional)

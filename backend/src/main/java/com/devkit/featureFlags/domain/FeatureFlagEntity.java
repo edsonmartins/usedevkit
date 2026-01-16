@@ -144,6 +144,14 @@ public class FeatureFlagEntity extends BaseEntity {
         this.status = FlagStatus.DISABLED;
     }
 
+    public void updateName(String name) {
+        this.name = AssertUtil.requireNotBlank(name, "Feature flag name cannot be null or empty");
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
     public void setRolloutPercentage(Integer percentage) {
         if (percentage < 0 || percentage > 100) {
             throw new IllegalArgumentException("Rollout percentage must be between 0 and 100");

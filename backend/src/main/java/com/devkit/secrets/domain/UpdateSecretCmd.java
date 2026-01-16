@@ -9,7 +9,9 @@ public record UpdateSecretCmd(
     String secretId,
     String encryptedValue,
     String description,
-    RotationPolicy rotationPolicy
+    RotationPolicy rotationPolicy,
+    String applicationId,
+    String environmentId
 ) {
     public UpdateSecretCmd {
         if (secretId == null || secretId.isBlank()) {

@@ -71,16 +71,13 @@ public class SecretCommandService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Secret not found with id: " + cmd.secretId()));
 
-        // Update fields
-        if (cmd.encryptedValue() != null) {
-            // Encrypted value is updated directly (normally via reflection)
-            // This would need a proper domain method in production
-        }
-
-        if (cmd.rotationPolicy() != null) {
-            // Rotation policy update would need a domain method
-        }
-
+        secret.updateDetails(
+            cmd.encryptedValue(),
+            cmd.description(),
+            cmd.rotationPolicy(),
+            cmd.applicationId(),
+            cmd.environmentId()
+        );
         secretRepository.save(secret);
     }
 

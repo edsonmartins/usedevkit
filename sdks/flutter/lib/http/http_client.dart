@@ -9,13 +9,12 @@ class HttpClient {
   final Duration timeout;
 
   HttpClient({
-    required this.baseUrl,
+    required String baseUrl,
     required this.apiKey,
     this.timeout = const Duration(milliseconds: 10000),
-  }) {
-    // Remove trailing slash from baseUrl
-    baseUrl = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl;
-  }
+  }) : baseUrl = baseUrl.endsWith('/')
+            ? baseUrl.substring(0, baseUrl.length - 1)
+            : baseUrl;
 
   Future<T> _request<T>(
     String path, {
@@ -31,9 +30,8 @@ class HttpClient {
     late http.Response response;
     try {
       if (method == 'GET') {
-        response = await http
-            .get(Uri.parse(url), headers: headers)
-            .timeout(timeout);
+        response =
+            await http.get(Uri.parse(url), headers: headers).timeout(timeout);
       } else if (method == 'POST') {
         response = await http
             .post(
@@ -70,9 +68,8 @@ class HttpClient {
         return null as T;
       }
 
-      final responseBody = response.body.isNotEmpty
-          ? jsonDecode(response.body)
-          : null;
+      final responseBody =
+          response.body.isNotEmpty ? jsonDecode(response.body) : null;
 
       return responseBody as T;
     } on TimeoutException {

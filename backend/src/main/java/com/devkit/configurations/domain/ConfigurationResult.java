@@ -2,7 +2,7 @@ package com.devkit.configurations.domain;
 
 import com.devkit.configurations.domain.ConfigurationEntity.ConfigType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Result DTO for configuration queries.
@@ -16,8 +16,8 @@ public record ConfigurationResult(
     Boolean isSecret,
     String environmentId,
     Integer versionNumber,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    Instant createdAt,
+    Instant updatedAt
 ) {
     public static ConfigurationResult from(ConfigurationEntity entity) {
         return new ConfigurationResult(

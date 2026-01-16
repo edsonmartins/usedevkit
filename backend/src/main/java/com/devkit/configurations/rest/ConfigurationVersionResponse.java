@@ -19,10 +19,10 @@ public record ConfigurationVersionResponse(
     static ConfigurationVersionResponse fromEntity(ConfigurationVersionEntity entity) {
         return new ConfigurationVersionResponse(
             entity.getId(),
-            entity.getKey(),
+            entity.getConfiguration().getKey(),
             entity.getValue(),
-            entity.getType(),
-            entity.getDescription(),
+            entity.getConfiguration().getType().name(),
+            entity.getConfiguration().getDescription(),
             entity.getVersionNumber(),
             entity.getCreatedAt()
         );

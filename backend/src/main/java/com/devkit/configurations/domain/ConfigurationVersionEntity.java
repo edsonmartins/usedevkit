@@ -12,7 +12,9 @@ import jakarta.persistence.*;
 @Table(name = "configuration_versions")
 public class ConfigurationVersionEntity extends BaseEntity {
 
-    @Column(name = "id", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
     private String id;
 
     @Column(name = "version_number", nullable = false)
@@ -36,14 +38,12 @@ public class ConfigurationVersionEntity extends BaseEntity {
 
     // Public constructor
     public ConfigurationVersionEntity(
-            String id,
             Integer versionNumber,
             String value,
             String changeReason,
             String changedBy,
             ConfigurationEntity configuration) {
 
-        this.id = AssertUtil.requireNotBlank(id, "Version id cannot be null or empty");
         this.versionNumber = AssertUtil.requireNotNull(versionNumber, "Version number cannot be null");
         this.value = AssertUtil.requireNotNull(value, "Value cannot be null");
         this.changeReason = changeReason;
@@ -60,7 +60,6 @@ public class ConfigurationVersionEntity extends BaseEntity {
             ConfigurationEntity configuration) {
 
         return new ConfigurationVersionEntity(
-                com.devkit.shared.domain.IdGenerator.generateString(),
                 versionNumber,
                 value,
                 changeReason,

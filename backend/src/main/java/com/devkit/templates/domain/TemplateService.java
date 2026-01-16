@@ -30,7 +30,7 @@ public class TemplateService {
     /**
      * Create a new template.
      */
-    public Long createTemplate(
+    public String createTemplate(
             String name,
             String description,
             String category,
@@ -74,7 +74,7 @@ public class TemplateService {
      * Update template (creates new version).
      */
     public void updateTemplate(
-            Long templateId,
+            String templateId,
             String description,
             List<String> tags,
             String schema,
@@ -114,7 +114,7 @@ public class TemplateService {
     /**
      * Activate a template.
      */
-    public void activateTemplate(Long templateId) {
+    public void activateTemplate(String templateId) {
         TemplateEntity template = getTemplate(templateId);
         template.activate();
         templateRepository.save(template);
@@ -125,7 +125,7 @@ public class TemplateService {
     /**
      * Deactivate a template.
      */
-    public void deactivateTemplate(Long templateId) {
+    public void deactivateTemplate(String templateId) {
         TemplateEntity template = getTemplate(templateId);
         template.deactivate();
         templateRepository.save(template);
@@ -136,7 +136,7 @@ public class TemplateService {
     /**
      * Delete a template.
      */
-    public void deleteTemplate(Long templateId) {
+    public void deleteTemplate(String templateId) {
         TemplateEntity template = getTemplate(templateId);
         templateRepository.delete(template);
 
@@ -148,7 +148,7 @@ public class TemplateService {
     /**
      * Apply template defaults to generate configuration values.
      */
-    public Map<String, Object> applyTemplate(Long templateId, Map<String, Object> overrides) {
+    public Map<String, Object> applyTemplate(String templateId, Map<String, Object> overrides) {
         TemplateEntity template = getTemplateWithVersions(templateId);
 
         TemplateVersionEntity currentVersion = template.getVersions().stream()
@@ -169,7 +169,7 @@ public class TemplateService {
     /**
      * Validate configuration against template rules.
      */
-    public boolean validateAgainstTemplate(Long templateId, Map<String, Object> config) {
+    public boolean validateAgainstTemplate(String templateId, Map<String, Object> config) {
         TemplateEntity template = getTemplateWithVersions(templateId);
 
         TemplateVersionEntity currentVersion = template.getVersions().stream()
@@ -184,14 +184,14 @@ public class TemplateService {
 
     // ==================== Query Methods ====================
 
-    public TemplateEntity getTemplate(Long templateId) {
+    public TemplateEntity getTemplate(String templateId) {
         return templateRepository.findById(templateId)
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Template not found: " + templateId
             ));
     }
 
-    public TemplateEntity getTemplateWithVersions(Long templateId) {
+    public TemplateEntity getTemplateWithVersions(String templateId) {
         return templateRepository.findByIdWithVersions(templateId)
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Template not found: " + templateId

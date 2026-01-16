@@ -35,8 +35,8 @@ public class ServiceEntity extends BaseEntity {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    @Column(name = "version", nullable = false, length = 50)
-    private String version;
+    @Column(name = "service_version", nullable = false, length = 50)
+    private String serviceVersion;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -86,7 +86,7 @@ public class ServiceEntity extends BaseEntity {
     private Boolean isActive;
 
     @Version
-    private int version;
+    private int entityVersion;
 
     // Associations
     @OneToMany(mappedBy = "sourceService", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -112,7 +112,7 @@ public class ServiceEntity extends BaseEntity {
 
         this.id = AssertUtil.requireNotNull(id, "Service id cannot be null");
         this.name = AssertUtil.requireNotBlank(name, "Service name cannot be null or empty");
-        this.version = AssertUtil.requireNotBlank(version, "Service version cannot be null or empty");
+        this.serviceVersion = AssertUtil.requireNotBlank(version, "Service version cannot be null or empty");
         this.description = description;
         this.repositoryUrl = repositoryUrl;
         this.documentationUrl = documentationUrl;
@@ -179,7 +179,7 @@ public class ServiceEntity extends BaseEntity {
     }
 
     public void removeDependency(ServiceId targetServiceId) {
-        dependencies.removeIf(dep -> dep.getTargetService().getId().equals(targetServiceId));
+        dependencies.removeIf(dep -> dep.getTargetServiceId().equals(targetServiceId.id()));
     }
 
     public boolean isHealthy() {
@@ -200,7 +200,7 @@ public class ServiceEntity extends BaseEntity {
     }
 
     public String getVersion() {
-        return version;
+        return serviceVersion;
     }
 
     public String getDescription() {

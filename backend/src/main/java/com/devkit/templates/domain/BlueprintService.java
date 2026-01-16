@@ -34,7 +34,7 @@ public class BlueprintService {
     /**
      * Create a new blueprint.
      */
-    public Long createBlueprint(
+    public String createBlueprint(
             String name,
             String description,
             String applicationId,
@@ -58,7 +58,7 @@ public class BlueprintService {
      * Update a blueprint.
      */
     public void updateBlueprint(
-            Long blueprintId,
+            String blueprintId,
             String name,
             String description) {
 
@@ -75,7 +75,7 @@ public class BlueprintService {
     /**
      * Activate a blueprint.
      */
-    public void activateBlueprint(Long blueprintId) {
+    public void activateBlueprint(String blueprintId) {
         BlueprintEntity blueprint = getBlueprint(blueprintId);
         blueprint.activate();
         blueprintRepository.save(blueprint);
@@ -86,7 +86,7 @@ public class BlueprintService {
     /**
      * Deactivate a blueprint.
      */
-    public void deactivateBlueprint(Long blueprintId) {
+    public void deactivateBlueprint(String blueprintId) {
         BlueprintEntity blueprint = getBlueprint(blueprintId);
         blueprint.deactivate();
         blueprintRepository.save(blueprint);
@@ -97,7 +97,7 @@ public class BlueprintService {
     /**
      * Delete a blueprint.
      */
-    public void deleteBlueprint(Long blueprintId) {
+    public void deleteBlueprint(String blueprintId) {
         BlueprintEntity blueprint = getBlueprint(blueprintId);
         blueprintRepository.delete(blueprint);
 
@@ -110,9 +110,9 @@ public class BlueprintService {
      * Add config to blueprint with template inheritance.
      */
     public void addConfigWithTemplate(
-            Long blueprintId,
+            String blueprintId,
             String configKey,
-            Long templateId,
+            String templateId,
             String valueOverride) {
 
         BlueprintEntity blueprint = getBlueprint(blueprintId);
@@ -141,7 +141,7 @@ public class BlueprintService {
      * Add config to blueprint without template.
      */
     public void addConfigWithoutTemplate(
-            Long blueprintId,
+            String blueprintId,
             String configKey,
             String value,
             Boolean isRequired) {
@@ -165,7 +165,7 @@ public class BlueprintService {
     /**
      * Remove config from blueprint.
      */
-    public void removeConfig(Long blueprintId, Long configId) {
+    public void removeConfig(String blueprintId, String configId) {
         BlueprintEntity blueprint = getBlueprintWithConfigs(blueprintId);
 
         BlueprintConfigEntity config = blueprint.getConfigs().stream()
@@ -185,7 +185,7 @@ public class BlueprintService {
     /**
      * Update config value override.
      */
-    public void updateConfigOverride(Long blueprintId, Long configId, String newValue) {
+    public void updateConfigOverride(String blueprintId, String configId, String newValue) {
         BlueprintEntity blueprint = getBlueprintWithConfigs(blueprintId);
 
         BlueprintConfigEntity config = blueprint.getConfigs().stream()
@@ -208,7 +208,7 @@ public class BlueprintService {
      * Generate full configuration map from blueprint.
      * Merges template defaults with blueprint overrides.
      */
-    public Map<String, Object> generateConfiguration(Long blueprintId) {
+    public Map<String, Object> generateConfiguration(String blueprintId) {
         BlueprintEntity blueprint = getBlueprintWithConfigs(blueprintId);
 
         Map<String, Object> config = new java.util.HashMap<>();
@@ -245,7 +245,7 @@ public class BlueprintService {
     /**
      * Validate blueprint configuration.
      */
-    public BlueprintValidationResult validateBlueprint(Long blueprintId) {
+    public BlueprintValidationResult validateBlueprint(String blueprintId) {
         BlueprintEntity blueprint = getBlueprintWithConfigs(blueprintId);
 
         List<String> errors = new ArrayList<>();
@@ -279,14 +279,14 @@ public class BlueprintService {
 
     // ==================== Query Methods ====================
 
-    public BlueprintEntity getBlueprint(Long blueprintId) {
+    public BlueprintEntity getBlueprint(String blueprintId) {
         return blueprintRepository.findById(blueprintId)
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Blueprint not found: " + blueprintId
             ));
     }
 
-    public BlueprintEntity getBlueprintWithConfigs(Long blueprintId) {
+    public BlueprintEntity getBlueprintWithConfigs(String blueprintId) {
         return blueprintRepository.findByIdWithConfigs(blueprintId)
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Blueprint not found: " + blueprintId

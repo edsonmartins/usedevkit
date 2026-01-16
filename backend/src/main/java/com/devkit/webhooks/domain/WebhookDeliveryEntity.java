@@ -21,6 +21,11 @@ public class WebhookDeliveryEntity extends BaseEntity {
         TIMEOUT       // Request timed out
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "webhook_id", nullable = false)
     private WebhookEntity webhook;
@@ -99,6 +104,10 @@ public class WebhookDeliveryEntity extends BaseEntity {
             previous.payload,
             previous.attemptNumber + 1
         );
+    }
+
+    public Long getId() {
+        return id;
     }
 
     // Domain methods

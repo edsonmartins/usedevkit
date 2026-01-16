@@ -15,6 +15,11 @@ import java.util.List;
 @Table(name = "blueprints")
 public class BlueprintEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
+    private String id;
+
     @Column(name = "name", nullable = false, unique = true, length = 255)
     private String name;
 
@@ -83,6 +88,10 @@ public class BlueprintEntity extends BaseEntity {
     }
 
     // Getters
+    public String getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

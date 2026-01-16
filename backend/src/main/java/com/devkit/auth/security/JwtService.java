@@ -91,7 +91,7 @@ public class JwtService {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .verifyWith(signingKey)
+                    .verifyWith((javax.crypto.SecretKey) signingKey)
                     .build()
                     .parseSignedClaims(token);
             return true;
@@ -108,7 +108,7 @@ public class JwtService {
      */
     public Claims extractClaims(String token) {
         return Jwts.parser()
-                .verifyWith(signingKey)
+                .verifyWith((javax.crypto.SecretKey) signingKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
