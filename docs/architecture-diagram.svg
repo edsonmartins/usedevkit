@@ -12,22 +12,22 @@
 
   <!-- Java App -->
   <rect x="80" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="145" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">☕ Java App</text>
+  <text x="145" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Java App</text>
   <text x="145" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Spring Boot SDK</text>
 
   <!-- TypeScript App -->
   <rect x="230" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="295" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">📘 TypeScript</text>
+  <text x="295" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">TypeScript</text>
   <text x="295" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Node.js SDK</text>
 
   <!-- Flutter App -->
   <rect x="380" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="445" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">📱 Flutter</text>
+  <text x="445" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Flutter</text>
   <text x="445" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Mobile SDK</text>
 
   <!-- CLI Tool -->
   <rect x="530" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="595" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">⚡ CLI Tool</text>
+  <text x="595" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">CLI Tool</text>
   <text x="595" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Rust CLI</text>
 
   <!-- SDKs Layer -->
@@ -44,22 +44,22 @@
 
   <!-- Tenants Dashboard -->
   <rect x="80" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="145" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🏢 Tenants</text>
+  <text x="145" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Tenants</text>
   <text x="145" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Multi-Tenancy</text>
 
   <!-- Roles Dashboard -->
   <rect x="230" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="295" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🔐 Roles</text>
+  <text x="295" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Roles</text>
   <text x="295" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">RBAC</text>
 
   <!-- Users Dashboard -->
   <rect x="380" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="445" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">👥 Users</text>
+  <text x="445" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Users</text>
   <text x="445" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Management</text>
 
   <!-- Config Dashboard -->
   <rect x="530" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="595" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">⚙️ Configs</text>
+  <text x="595" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Configs</text>
   <text x="595" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Settings</text>
 
   <!-- Arrow -->
@@ -72,32 +72,32 @@
 
   <!-- Tenant API -->
   <rect x="80" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="180" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🏢 Tenant API</text>
+  <text x="180" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Tenant API</text>
   <text x="180" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">11 endpoints</text>
 
   <!-- RBAC API -->
   <rect x="80" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="180" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔐 RBAC API</text>
+  <text x="180" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">RBAC API</text>
   <text x="180" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">17 endpoints</text>
 
   <!-- Config API -->
   <rect x="300" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="400" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">⚙️ Config API</text>
+  <text x="400" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Config API</text>
   <text x="400" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Management</text>
 
   <!-- Secrets API -->
   <rect x="300" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="400" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔒 Secrets API</text>
+  <text x="400" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Secrets API</text>
   <text x="400" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">AES-256</text>
 
   <!-- Feature Flags API -->
   <rect x="520" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="620" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🚩 Feature Flags</text>
+  <text x="620" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Feature Flags</text>
   <text x="620" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Rollouts</text>
 
   <!-- Webhooks API -->
   <rect x="520" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="620" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔗 Webhooks</text>
+  <text x="620" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Webhooks</text>
   <text x="620" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Notifications</text>
 
   <!-- Arrow -->

@@ -246,7 +246,7 @@ See [Deployment Guide](documentos/07-DEPLOYMENT.md) for:
 ### High-Level Architecture
 
 <p align="center">
-  <img src="docs/architecture-diagram.svg" alt="DevKit Architecture Diagram" width="800"/>
+  <img src="https://raw.githubusercontent.com/edsonmartins/usedevkit/main/docs/architecture-diagram.svg" alt="DevKit Architecture Diagram" width="800"/>
 </p>
 
 <p align="center">
