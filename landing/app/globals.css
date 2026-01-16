@@ -1,0 +1,248 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-terminal-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-terminal-bg text-terminal-text font-mono;
+    font-feature-settings: 'zero' on, 'ss01' on;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-terminal-surface;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-terminal-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-terminal-dim;
+  }
+}
+
+@layer components {
+  /* Cursor blink animation for terminal effect */
+  .cursor-blink::after {
+    content: '█';
+    @apply text-terminal-green ml-0.5;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* Glowing text effect */
+  .glow-green {
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5),
+                 0 0 20px rgba(0, 255, 157, 0.3),
+                 0 0 30px rgba(0, 255, 157, 0.2);
+  }
+
+  .glow-coral {
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.5),
+                 0 0 20px rgba(255, 107, 107, 0.3);
+  }
+
+  /* Terminal window */
+  .terminal-window {
+    @apply bg-terminal-surface border border-terminal-border rounded-lg overflow-hidden;
+    box-shadow: 0 0 0 1px rgba(0, 255, 157, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .terminal-header {
+    @apply bg-terminal-surface border-b border-terminal-border px-4 py-3 flex items-center gap-2;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply relative inline-flex items-center gap-2 px-6 py-3 bg-terminal-green text-terminal-bg font-semibold rounded;
+    @apply transition-all duration-200;
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+  }
+
+  .btn-primary:hover {
+    @apply scale-105;
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-transparent text-terminal-text font-semibold rounded border border-terminal-border;
+    @apply transition-all duration-200;
+  }
+
+  .btn-secondary:hover {
+    @apply border-terminal-green text-terminal-green;
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-terminal-surface border border-terminal-border rounded-lg p-6;
+    @apply transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply border-terminal-dim;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Feature icon container */
+  .feature-icon {
+    @apply w-12 h-12 flex items-center justify-center rounded border border-terminal-border;
+    @apply transition-all duration-300;
+  }
+
+  /* Code block styling */
+  .code-block {
+    @apply bg-terminal-bg border border-terminal-border rounded p-4 font-mono text-sm;
+    @apply overflow-x-auto;
+  }
+
+  .code-block .keyword {
+    @apply text-terminal-purple;
+  }
+
+  .code-block .string {
+    @apply text-terminal-green;
+  }
+
+  .code-block .comment {
+    @apply text-terminal-dim;
+  }
+
+  .code-block .function {
+    @apply text-terminal-blue;
+  }
+
+  /* Gradient border effect */
+  .gradient-border {
+    position: relative;
+    @apply bg-terminal-surface rounded-lg;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    @apply rounded-lg;
+    padding: 1px;
+    background: linear-gradient(135deg, #00ff9d, #4d9fff, #ff6b6b);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  /* Section divider */
+  .section-divider {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-terminal-border to-transparent;
+  }
+
+  /* Animated underline */
+  .hover-underline {
+    position: relative;
+  }
+
+  .hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    @apply w-0 h-0.5 bg-terminal-green transition-all duration-300;
+  }
+
+  .hover-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Stats counter */
+  .stat-value {
+    @apply font-display text-4xl md:text-5xl font-bold text-terminal-green glow-green;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Noise texture overlay */
+  .noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+  }
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(0, 255, 157, 0.3);
+  color: inherit;
+}
+
+/* Link hover animation */
+a {
+  @apply transition-colors duration-200;
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  @apply outline-none ring-2 ring-terminal-green ring-offset-2 ring-offset-terminal-bg;
+}
+
+/* Smooth reveal animation classes */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stagger-children.active > *:nth-child(1) { animation: reveal 0.6s ease 0.1s forwards; }
+.stagger-children.active > *:nth-child(2) { animation: reveal 0.6s ease 0.2s forwards; }
+.stagger-children.active > *:nth-child(3) { animation: reveal 0.6s ease 0.3s forwards; }
+.stagger-children.active > *:nth-child(4) { animation: reveal 0.6s ease 0.4s forwards; }
+.stagger-children.active > *:nth-child(5) { animation: reveal 0.6s ease 0.5s forwards; }
+.stagger-children.active > *:nth-child(6) { animation: reveal 0.6s ease 0.6s forwards; }
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

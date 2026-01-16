@@ -85,6 +85,8 @@ frontend/out/
 frontend/.next/
 frontend/swc-cache/
 frontend/turbo/
+landing/.next/
+landing/node_modules/
 
 # Production
 frontend/build/
@@ -171,4 +173,4 @@ local.properties
 
 # Subprojects
 frontend/
-landing/
+# landing/  # Removed - now part of the project
