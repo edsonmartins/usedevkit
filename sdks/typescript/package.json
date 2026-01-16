@@ -1,0 +1,42 @@
+{
+  "name": "@devkit/sdk",
+  "version": "1.0.0",
+  "description": "TypeScript client library for DevKit - Configuration Management & Feature Flags Platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "devkit",
+    "configuration",
+    "feature-flags",
+    "config-management",
+    "secrets"
+  ],
+  "author": "DevKit Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usedevkit/sdk-typescript.git"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/node-fetch": "^2.6.4",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}

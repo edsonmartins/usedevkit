@@ -1,0 +1,911 @@
+{
+  "info": {
+    "name": "ConfigHub - Multi-Tenancy & RBAC",
+    "description": "Complete API collection for Multi-Tenancy and Role-Based Access Control",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "apiVersion",
+      "value": "api/v1",
+      "type": "string"
+    },
+    {
+      "key": "tenantId",
+      "value": "1",
+      "type": "string",
+      "disabled": true
+    },
+    {
+      "key": "userId",
+      "value": "user123",
+      "type": "string",
+      "disabled": true
+    },
+    {
+      "key": "roleId",
+      "value": "1",
+      "type": "string",
+      "disabled": true
+    }
+  ],
+  "item": [
+    {
+      "name": "Tenant Management",
+      "item": [
+        {
+          "name": "Get All Tenants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants"]
+            },
+            "description": "Retrieve all tenants in the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get detailed information about a specific tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/slug/:slug",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", "slug", ":slug"],
+              "variable": [
+                {
+                  "key": "slug",
+                  "value": "acme-corp"
+                }
+              ]
+            },
+            "description": "Get tenant by its unique slug identifier"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Tenant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corporation\",\n  \"slug\": \"acme-corp\",\n  \"domain\": \"acme.com\",\n  \"description\": \"Acme Corp tenant\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants"]
+            },
+            "description": "Create a new tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Tenant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corporation Updated\",\n  \"domain\": \"newacme.com\",\n  \"description\": \"Updated description\",\n  \"logoUrl\": \"https://example.com/logo.png\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Update tenant information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Tenant",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Delete a tenant (cascades to all related data)"
+          },
+          "response": []
+        },
+        {
+          "name": "Activate Tenant",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id", "activate"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Activate a tenant account"
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Tenant",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id", "deactivate"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Deactivate a tenant account"
+          },
+          "response": []
+        },
+        {
+          "name": "Upgrade Tenant Plan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan\": \"PROFESSIONAL\",\n  \"maxUsers\": 100,\n  \"maxApplications\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id/upgrade-plan",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id", "upgrade-plan"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Upgrade tenant subscription plan"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:id/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":id", "stats"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get tenant usage statistics"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tenant User Management",
+      "item": [
+        {
+          "name": "Get All Users in Tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get all users in a tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Users in Tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", "active"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get only active users in a tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Specific User in Tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", ":userId"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "Get a specific user in a tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Add User to Tenant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user456\",\n  \"email\": \"john@example.com\",\n  \"name\": \"John Doe\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Add a user to a tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Role in Tenant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"MEMBER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", ":userId"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "Update user role in tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Activate User in Tenant",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/:userId/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", ":userId", "activate"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "Activate a user in tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate User in Tenant",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/:userId/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", ":userId", "deactivate"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "Deactivate a user in tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove User from Tenant",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", ":userId"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "Remove a user from tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant Owners",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/owners",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", "owners"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get all tenant owners"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tenant Admins",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/admins",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", "admins"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get all tenant admins (owners + admins)"
+          },
+          "response": []
+        },
+        {
+          "name": "Count Users in Tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/tenants/:tenantId/users/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "tenants", ":tenantId", "users", "count"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Count active users in a tenant"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Role Management",
+      "item": [
+        {
+          "name": "Get All Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles"]
+            },
+            "description": "Retrieve all roles (system and custom)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Role by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{roleId}}"
+                }
+              ]
+            },
+            "description": "Get detailed information about a specific role"
+          },
+          "response": []
+        },
+        {
+          "name": "Get System Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/system",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", "system"]
+            },
+            "description": "Get all system roles"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Custom Roles by Tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/tenant/:tenantId",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", "tenant", ":tenantId"],
+              "variable": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            },
+            "description": "Get all custom roles for a specific tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Project Manager\",\n  \"description\": \"Can manage projects and configurations\",\n  \"tenantId\": 1,\n  \"permissionIds\": [1, 2, 5, 6]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles"]
+            },
+            "description": "Create a new custom role"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Senior Project Manager\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{roleId}}"
+                }
+              ]
+            },
+            "description": "Update role information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Role",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{roleId}}"
+                }
+              ]
+            },
+            "description": "Delete a custom role (system roles cannot be deleted)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Permission Management",
+      "item": [
+        {
+          "name": "Get All Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/permissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "permissions"]
+            },
+            "description": "Retrieve all permissions"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Permissions by Resource",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/permissions/resource/:resource",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "permissions", "resource", ":resource"],
+              "variable": [
+                {
+                  "key": "resource",
+                  "value": "config"
+                }
+              ]
+            },
+            "description": "Get all permissions for a specific resource"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Permission",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"application:deploy\",\n  \"displayName\": \"Deploy Applications\",\n  \"description\": \"Can deploy applications to production\",\n  \"resource\": \"application\",\n  \"action\": \"deploy\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/permissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "permissions"]
+            },
+            "description": "Create a new permission"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Role Permissions",
+      "item": [
+        {
+          "name": "Get Role Permissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/:roleId/permissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", ":roleId", "permissions"],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "{{roleId}}"
+                }
+              ]
+            },
+            "description": "Get all permissions for a role"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Permission to Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissionId\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/:roleId/permissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", ":roleId", "permissions"],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "{{roleId}}"
+                }
+              ]
+            },
+            "description": "Add a permission to a role"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Permission from Role",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/:roleId/permissions/:permissionId",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", ":roleId", "permissions", ":permissionId"],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "{{roleId}}"
+                },
+                {
+                  "key": "permissionId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Remove a permission from a role"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Roles & Permissions",
+      "item": [
+        {
+          "name": "Grant Role to User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantId\": 1,\n  \"userId\": \"user123\",\n  \"roleId\": 3,\n  \"grantedBy\": \"admin456\",\n  \"reason\": \"Project lead assignment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/user-roles/grant",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", "user-roles", "grant"]
+            },
+            "description": "Grant a role to a user in a tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Revoke Role from User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/user-roles/revoke?tenantId=1&userId=user123&roleId=3",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", "user-roles", "revoke"],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "1"
+                },
+                {
+                  "key": "userId",
+                  "value": "user123"
+                },
+                {
+                  "key": "roleId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Revoke a role from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/roles/user-roles?tenantId=1&userId=user123",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "roles", "user-roles"],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "1"
+                },
+                {
+                  "key": "userId",
+                  "value": "user123"
+                }
+              ]
+            },
+            "description": "Get all roles for a user in a tenant"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Permission",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantId\": 1,\n  \"userId\": \"user123\",\n  \"resource\": \"config\",\n  \"action\": \"write\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiVersion}}/permissions/check",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiVersion}}", "permissions", "check"]
+            },
+            "description": "Check if a user has a specific permission"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

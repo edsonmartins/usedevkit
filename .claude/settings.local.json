@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Skill(spring-boot-dev:jpa-entity-creator)",
+      "Skill(spring-boot-dev:spring-data-jpa-repo-creator)",
+      "Skill(spring-boot-dev:spring-service-creator)",
+      "Skill(spring-boot-dev:spring-rest-api-creator)",
+      "Skill(design-principles)",
+      "Bash(npx create-next-app:*)",
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npm install:*)",
+      "Skill(frontend-design:frontend-design)",
+      "Bash(npm run dev)",
+      "Bash(npm run build:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm run dev)",
+      "Bash(cat:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs:*)",
+      "Bash(find:*)",
+      "Bash(mvn clean compile:*)",
+      "Bash(java:*)",
+      "Bash(javac:*)",
+      "Bash(source:*)",
+      "Bash(mvn compile:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
