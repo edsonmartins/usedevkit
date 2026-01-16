@@ -1,189 +1,149 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
-  <!-- Definitions for gradients and filters -->
-  <defs>
-    <!-- Blue Gradient -->
-    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
-    </linearGradient>
-
-    <!-- Purple Gradient -->
-    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#6D28D9;stop-opacity:1" />
-    </linearGradient>
-
-    <!-- Green Gradient -->
-    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
-    </linearGradient>
-
-    <!-- Orange Gradient -->
-    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#D97706;stop-opacity:1" />
-    </linearGradient>
-
-    <!-- Gray Gradient -->
-    <linearGradient id="grayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4B5563;stop-opacity:1" />
-    </linearGradient>
-
-    <!-- Shadow Filter -->
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.1"/>
-    </filter>
-
-    <!-- Arrow Marker -->
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
-    </marker>
-  </defs>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 920">
   <!-- Background -->
-  <rect width="800" height="1000" fill="#F9FAFB"/>
+  <rect width="800" height="920" fill="#ffffff"/>
 
   <!-- Title -->
-  <text x="400" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#1F2937" text-anchor="middle">DevKit Architecture</text>
-  <text x="400" y="75" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" text-anchor="middle">Multi-Tenancy & RBAC Platform</text>
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#1F2937" text-anchor="middle">DevKit Architecture</text>
+  <text x="400" y="65" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" text-anchor="middle">Multi-Tenancy & RBAC Platform</text>
 
   <!-- CLIENT APPLICATIONS LAYER -->
-  <rect x="50" y="110" width="700" height="140" rx="10" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
-  <text x="400" y="135" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1E40AF" text-anchor="middle">CLIENT APPLICATIONS</text>
+  <rect x="50" y="100" width="700" height="120" rx="8" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+  <text x="400" y="125" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1E40AF" text-anchor="middle">CLIENT APPLICATIONS</text>
 
   <!-- Java App -->
-  <rect x="80" y="150" width="130" height="70" rx="8" fill="url(#blueGrad)" filter="url(#shadow)"/>
-  <text x="145" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">☕ Java App</text>
-  <text x="145" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Spring Boot SDK</text>
+  <rect x="80" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
+  <text x="145" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">☕ Java App</text>
+  <text x="145" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Spring Boot SDK</text>
 
   <!-- TypeScript App -->
-  <rect x="230" y="150" width="130" height="70" rx="8" fill="url(#blueGrad)" filter="url(#shadow)"/>
-  <text x="295" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">📘 TypeScript</text>
-  <text x="295" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Node.js SDK</text>
+  <rect x="230" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
+  <text x="295" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">📘 TypeScript</text>
+  <text x="295" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Node.js SDK</text>
 
   <!-- Flutter App -->
-  <rect x="380" y="150" width="130" height="70" rx="8" fill="url(#blueGrad)" filter="url(#shadow)"/>
-  <text x="445" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">📱 Flutter</text>
-  <text x="445" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Mobile SDK</text>
+  <rect x="380" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
+  <text x="445" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">📱 Flutter</text>
+  <text x="445" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Mobile SDK</text>
 
   <!-- CLI Tool -->
-  <rect x="530" y="150" width="130" height="70" rx="8" fill="url(#blueGrad)" filter="url(#shadow)"/>
-  <text x="595" y="175" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">⚡ CLI Tool</text>
-  <text x="595" y="195" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Rust CLI</text>
+  <rect x="530" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
+  <text x="595" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">⚡ CLI Tool</text>
+  <text x="595" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Rust CLI</text>
 
   <!-- SDKs Layer -->
-  <rect x="50" y="270" width="700" height="50" rx="8" fill="url(#purpleGrad)" filter="url(#shadow)"/>
-  <text x="400" y="300" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">SDKs (HTTP/REST API)</text>
+  <rect x="50" y="240" width="700" height="40" rx="6" fill="#8B5CF6"/>
+  <text x="400" y="265" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">SDKs (HTTP/REST API)</text>
 
-  <!-- Arrow 1 -->
-  <line x1="400" y1="320" x2="400" y2="360" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- Arrow -->
+  <line x1="400" y1="280" x2="400" y2="310" stroke="#6B7280" stroke-width="2"/>
+  <polygon points="400,310 395,305 405,305" fill="#6B7280"/>
 
   <!-- FRONTEND LAYER -->
-  <rect x="50" y="370" width="700" height="150" rx="10" fill="#F0FDF4" stroke="#10B981" stroke-width="2"/>
-  <text x="400" y="395" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#065F46" text-anchor="middle">NEXT.JS FRONTEND (React 19 + Tailwind CSS)</text>
+  <rect x="50" y="320" width="700" height="130" rx="8" fill="#F0FDF4" stroke="#10B981" stroke-width="2"/>
+  <text x="400" y="345" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#065F46" text-anchor="middle">NEXT.JS FRONTEND (React 19 + Tailwind CSS)</text>
 
   <!-- Tenants Dashboard -->
-  <rect x="80" y="410" width="130" height="70" rx="8" fill="url(#greenGrad)" filter="url(#shadow)"/>
-  <text x="145" y="435" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🏢 Tenants</text>
-  <text x="145" y="455" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Multi-Tenancy</text>
+  <rect x="80" y="360" width="130" height="60" rx="6" fill="#10B981"/>
+  <text x="145" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🏢 Tenants</text>
+  <text x="145" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Multi-Tenancy</text>
 
   <!-- Roles Dashboard -->
-  <rect x="230" y="410" width="130" height="70" rx="8" fill="url(#greenGrad)" filter="url(#shadow)"/>
-  <text x="295" y="435" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🔐 Roles</text>
-  <text x="295" y="455" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">RBAC</text>
+  <rect x="230" y="360" width="130" height="60" rx="6" fill="#10B981"/>
+  <text x="295" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">🔐 Roles</text>
+  <text x="295" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">RBAC</text>
 
   <!-- Users Dashboard -->
-  <rect x="380" y="410" width="130" height="70" rx="8" fill="url(#greenGrad)" filter="url(#shadow)"/>
-  <text x="445" y="435" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">👥 Users</text>
-  <text x="445" y="455" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Management</text>
+  <rect x="380" y="360" width="130" height="60" rx="6" fill="#10B981"/>
+  <text x="445" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">👥 Users</text>
+  <text x="445" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Management</text>
 
   <!-- Config Dashboard -->
-  <rect x="530" y="410" width="130" height="70" rx="8" fill="url(#greenGrad)" filter="url(#shadow)"/>
-  <text x="595" y="435" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">⚙️ Configs</text>
-  <text x="595" y="455" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle" opacity="0.9">Settings</text>
+  <rect x="530" y="360" width="130" height="60" rx="6" fill="#10B981"/>
+  <text x="595" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">⚙️ Configs</text>
+  <text x="595" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Settings</text>
 
-  <!-- Arrow 2 -->
-  <line x1="400" y1="520" x2="400" y2="560" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- Arrow -->
+  <line x1="400" y1="450" x2="400" y2="480" stroke="#6B7280" stroke-width="2"/>
+  <polygon points="400,480 395,475 405,475" fill="#6B7280"/>
 
   <!-- BACKEND LAYER -->
-  <rect x="50" y="570" width="700" height="180" rx="10" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
-  <text x="400" y="595" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400E" text-anchor="middle">SPRING BOOT 3.2 BACKEND (Java 17)</text>
+  <rect x="50" y="490" width="700" height="160" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <text x="400" y="515" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400E" text-anchor="middle">SPRING BOOT 3.2 BACKEND (Java 17)</text>
 
   <!-- Tenant API -->
-  <rect x="80" y="610" width="200" height="50" rx="8" fill="url(#orangeGrad)" filter="url(#shadow)"/>
-  <text x="180" y="632" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🏢 Tenant API</text>
-  <text x="180" y="648" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">11 endpoints</text>
+  <rect x="80" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
+  <text x="180" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🏢 Tenant API</text>
+  <text x="180" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">11 endpoints</text>
 
   <!-- RBAC API -->
-  <rect x="80" y="670" width="200" height="50" rx="8" fill="url(#orangeGrad)" filter="url(#shadow)"/>
-  <text x="180" y="692" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔐 RBAC API</text>
-  <text x="180" y="708" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">17 endpoints</text>
+  <rect x="80" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
+  <text x="180" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔐 RBAC API</text>
+  <text x="180" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">17 endpoints</text>
 
   <!-- Config API -->
-  <rect x="300" y="610" width="200" height="50" rx="8" fill="url(#orangeGrad)" filter="url(#shadow)"/>
-  <text x="400" y="632" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">⚙️ Config API</text>
-  <text x="400" y="648" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">Management</text>
+  <rect x="300" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
+  <text x="400" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">⚙️ Config API</text>
+  <text x="400" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Management</text>
 
   <!-- Secrets API -->
-  <rect x="300" y="670" width="200" height="50" rx="8" fill="url(#orangeGrad)" filter="url(#shadow)"/>
-  <text x="400" y="692" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔒 Secrets API</text>
-  <text x="400" y="708" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">AES-256</text>
+  <rect x="300" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
+  <text x="400" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔒 Secrets API</text>
+  <text x="400" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">AES-256</text>
 
   <!-- Feature Flags API -->
-  <rect x="520" y="610" width="200" height="50" rx="8" fill="url(#orangeGrad)" filter="url(#shadow)"/>
-  <text x="620" y="632" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🚩 Feature Flags</text>
-  <text x="620" y="648" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">Rollouts</text>
+  <rect x="520" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
+  <text x="620" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🚩 Feature Flags</text>
+  <text x="620" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Rollouts</text>
 
   <!-- Webhooks API -->
-  <rect x="520" y="670" width="200" height="50" rx="8" fill="url(#orangeGrad)" filter="url(#shadow)"/>
-  <text x="620" y="692" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔗 Webhooks</text>
-  <text x="620" y="708" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">Notifications</text>
+  <rect x="520" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
+  <text x="620" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">🔗 Webhooks</text>
+  <text x="620" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Notifications</text>
 
-  <!-- Arrow 3 -->
-  <line x1="400" y1="750" x2="400" y2="790" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- Arrow -->
+  <line x1="400" y1="650" x2="400" y2="680" stroke="#6B7280" stroke-width="2"/>
+  <polygon points="400,680 395,675 405,675" fill="#6B7280"/>
 
   <!-- DATABASE LAYER -->
-  <rect x="50" y="800" width="700" height="150" rx="10" fill="#F3F4F6" stroke="#4B5563" stroke-width="2"/>
-  <text x="400" y="825" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937" text-anchor="middle">POSTGRESQL DATABASE (15+)</text>
+  <rect x="50" y="690" width="700" height="180" rx="8" fill="#F3F4F6" stroke="#4B5563" stroke-width="2"/>
+  <text x="400" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937" text-anchor="middle">POSTGRESQL DATABASE (15+)</text>
 
   <!-- Tenants Table -->
-  <rect x="80" y="840" width="130" height="50" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="145" y="862" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">tenants</text>
-  <text x="145" y="878" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">Multi-tenant</text>
+  <rect x="80" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
+  <text x="145" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">tenants</text>
+  <text x="145" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Multi-tenant</text>
 
   <!-- Roles Table -->
-  <rect x="230" y="840" width="130" height="50" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="295" y="862" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">roles</text>
-  <text x="295" y="878" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">RBAC</text>
+  <rect x="230" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
+  <text x="295" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">roles</text>
+  <text x="295" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">RBAC</text>
 
   <!-- Permissions Table -->
-  <rect x="380" y="840" width="130" height="50" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="445" y="862" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">permissions</text>
-  <text x="445" y="878" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">38+ perms</text>
+  <rect x="380" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
+  <text x="445" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">permissions</text>
+  <text x="445" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">38+ perms</text>
 
   <!-- Secrets Table -->
-  <rect x="530" y="840" width="130" height="50" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="595" y="862" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">secrets</text>
-  <text x="595" y="878" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle" opacity="0.9">Encrypted</text>
+  <rect x="530" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
+  <text x="595" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">secrets</text>
+  <text x="595" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Encrypted</text>
 
   <!-- Feature Flags Table -->
-  <rect x="80" y="900" width="130" height="40" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="145" y="920" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">feature_flags</text>
+  <rect x="80" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
+  <text x="145" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">feature_flags</text>
 
   <!-- Configs Table -->
-  <rect x="230" y="900" width="130" height="40" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="295" y="920" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">configurations</text>
+  <rect x="230" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
+  <text x="295" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">configurations</text>
 
   <!-- User Roles Table -->
-  <rect x="380" y="900" width="130" height="40" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="445" y="920" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">user_roles</text>
+  <rect x="380" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
+  <text x="445" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">user_roles</text>
 
   <!-- Audit Logs Table -->
-  <rect x="530" y="900" width="130" height="40" rx="6" fill="url(#grayGrad)" filter="url(#shadow)"/>
-  <text x="595" y="920" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">audit_logs</text>
+  <rect x="530" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
+  <text x="595" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">audit_logs</text>
 
   <!-- Footer -->
-  <text x="400" y="975" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" text-anchor="middle">40+ REST APIs • 38+ Permissions • 4 Plans • Complete Isolation</text>
+  <text x="400" y="895" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" text-anchor="middle">40+ REST APIs • 38+ Permissions • 4 Plans • Complete Isolation</text>
 </svg>
