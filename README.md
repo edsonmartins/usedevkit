@@ -26,6 +26,10 @@
 
 **DevKit** is an open-source configuration management, secrets management, and feature flags platform designed for modern development teams. Think of it as the Swiss Army Knife for Developers - a single tool that replaces multiple scattered solutions.
 
+<p align="center">
+  <img src="images/infografico2.png" alt="DevKit Infographic" width="800"/>
+</p>
+
 ### 🎯 Why DevKit?
 
 **The Problem:**
