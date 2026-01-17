@@ -33,7 +33,7 @@ public class SecretController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a new secret", description = "Creates a new secret with the provided encrypted value")
+    @Operation(summary = "Create a new secret", description = "Creates a new secret. The value will be encrypted server-side using the application's encryption key.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Secret created successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input")
@@ -41,7 +41,7 @@ public class SecretController {
     ResponseEntity<SecretResponse> createSecret(@Valid @RequestBody CreateSecretRequest request) {
         var cmd = new CreateSecretCmd(
             request.key(),
-            request.encryptedValue(),
+            request.value(),
             request.description(),
             request.applicationId(),
             request.environmentId(),
@@ -101,7 +101,7 @@ public class SecretController {
     }
 
     @GetMapping("/application/{applicationId}/environment/{environmentId}/map")
-    @Operation(summary = "Get secrets as map", description = "Retrieves all secrets as a key-value map with decrypted values for SDK consumption")
+    @Operation(summary = "Get secrets as map", description = "Retrieves all secrets as a key-value map with encrypted values for SDK consumption. The SDK should decrypt these values using the application's encryption key.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Secret map retrieved successfully")
     })
@@ -113,7 +113,7 @@ public class SecretController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get secret by ID", description = "Retrieves a secret by its ID (without decrypted value)")
+    @Operation(summary = "Get secret by ID", description = "Retrieves a secret by its ID (with encrypted value)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Secret retrieved successfully"),
         @ApiResponse(responseCode = "404", description = "Secret not found")
@@ -123,19 +123,8 @@ public class SecretController {
         return ResponseEntity.ok(SecretResponse.from(result));
     }
 
-    @GetMapping("/{id}/decrypt")
-    @Operation(summary = "Get secret with decrypted value", description = "Retrieves a secret by its ID with decrypted value")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Secret retrieved successfully"),
-        @ApiResponse(responseCode = "404", description = "Secret not found")
-    })
-    ResponseEntity<SecretResponseWithDecrypted> getSecretWithDecryptedValue(@PathVariable String id) {
-        var result = queryService.getSecretWithDecryptedValue(id);
-        return ResponseEntity.ok(SecretResponseWithDecrypted.from(result));
-    }
-
     @PostMapping("/{id}/rotate")
-    @Operation(summary = "Rotate a secret", description = "Rotates a secret with a new encrypted value")
+    @Operation(summary = "Rotate a secret", description = "Rotates a secret with a new value. The value will be encrypted server-side using the application's encryption key.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Secret rotated successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input"),
@@ -144,7 +133,7 @@ public class SecretController {
     ResponseEntity<SecretResponse> rotateSecret(
             @PathVariable String id,
             @Valid @RequestBody RotateSecretRequest request) {
-        var cmd = new RotateSecretCmd(id, request.newEncryptedValue(), request.rotatedBy());
+        var cmd = new RotateSecretCmd(id, request.newValue(), request.rotatedBy());
         commandService.rotateSecret(cmd);
         var result = queryService.getSecretById(id);
 
@@ -152,7 +141,7 @@ public class SecretController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update a secret", description = "Updates secret metadata and rotation policy")
+    @Operation(summary = "Update a secret", description = "Updates secret metadata, rotation policy, and value. If value is provided, it will be encrypted server-side.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Secret updated successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input"),
@@ -163,7 +152,7 @@ public class SecretController {
             @Valid @RequestBody UpdateSecretRequest request) {
         var cmd = new UpdateSecretCmd(
             id,
-            request.encryptedValue(),
+            request.value(),
             request.description(),
             request.rotationPolicy(),
             request.applicationId(),

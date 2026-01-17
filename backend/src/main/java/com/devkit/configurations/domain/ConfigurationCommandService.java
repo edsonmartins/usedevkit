@@ -1,11 +1,15 @@
 package com.devkit.configurations.domain;
 
+import com.devkit.applications.domain.ApplicationEncryptionKeyRepository;
 import com.devkit.configurations.domain.events.ConfigurationCreatedEvent;
 import com.devkit.configurations.domain.events.ConfigurationDeletedEvent;
 import com.devkit.configurations.domain.events.ConfigurationUpdatedEvent;
 import com.devkit.configurations.domain.vo.ConfigurationId;
+import com.devkit.environments.domain.EnvironmentEntity;
+import com.devkit.environments.domain.EnvironmentRepository;
 import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.shared.domain.SpringEventPublisher;
+import com.devkit.shared.security.EncryptionService;
 import com.devkit.configurations.domain.ConfigurationVersionEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,26 +25,36 @@ public class ConfigurationCommandService {
 
     private final ConfigurationRepository configurationRepository;
     private final SpringEventPublisher eventPublisher;
+    private final EnvironmentRepository environmentRepository;
+    private final ApplicationEncryptionKeyRepository encryptionKeyRepository;
+    private final EncryptionService encryptionService;
 
     ConfigurationCommandService(
             ConfigurationRepository configurationRepository,
-            SpringEventPublisher eventPublisher) {
+            SpringEventPublisher eventPublisher,
+            EnvironmentRepository environmentRepository,
+            ApplicationEncryptionKeyRepository encryptionKeyRepository,
+            EncryptionService encryptionService) {
         this.configurationRepository = configurationRepository;
         this.eventPublisher = eventPublisher;
+        this.environmentRepository = environmentRepository;
+        this.encryptionKeyRepository = encryptionKeyRepository;
+        this.encryptionService = encryptionService;
     }
 
-    /**
-     * Create a new configuration.
-     * @param cmd the command containing configuration details
-     * @return the ID of the created configuration
-     */
     public String createConfiguration(CreateConfigurationCmd cmd) {
-        // Check if configuration with same key already exists in environment
         configurationRepository.findByEnvironmentIdAndKey(cmd.environmentId(), cmd.key())
                 .ifPresent(existing -> {
                     throw new IllegalArgumentException(
                             "Configuration with key '" + cmd.key() + "' already exists in environment");
                 });
+
+        EnvironmentEntity environment = environmentRepository.findById(
+                        com.devkit.environments.domain.vo.EnvironmentId.of(cmd.environmentId()))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Environment not found: " + cmd.environmentId()));
+
+        String applicationId = environment.getApplicationId();
 
         var configuration = ConfigurationEntity.create(
                 cmd.key(),
@@ -50,6 +64,10 @@ public class ConfigurationCommandService {
                 cmd.isSecret(),
                 cmd.environmentId()
         );
+
+        if (Boolean.TRUE.equals(cmd.isSecret())) {
+            encryptConfigurationValue(configuration, applicationId, cmd.value());
+        }
 
         configurationRepository.save(configuration);
         eventPublisher.publish(new ConfigurationCreatedEvent(
@@ -61,41 +79,64 @@ public class ConfigurationCommandService {
         return configuration.getId().id();
     }
 
-    /**
-     * Update an existing configuration.
-     * @param cmd the command containing updated configuration details
-     */
+    private void encryptConfigurationValue(ConfigurationEntity configuration, String applicationId, String plaintextValue) {
+        var encryptionKey = encryptionKeyRepository.findLatestActiveByApplicationId(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Application encryption key not found. Please create an encryption key for this application first."));
+
+        String applicationKey = encryptionService.unwrapApplicationKey(encryptionKey.getEncryptedKey());
+        String encryptedValue = encryptionService.encryptForApp(
+                plaintextValue,
+                applicationKey,
+                encryptionKey.getSalt()
+        );
+
+        configuration.setEncryptedValueDirectly(encryptedValue);
+        configuration.setValueDirectly(null);
+    }
+
     public void updateConfiguration(UpdateConfigurationCmd cmd) {
         var configuration = configurationRepository.findById(ConfigurationId.of(cmd.configurationId()))
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Configuration not found with id: " + cmd.configurationId()));
 
-        // Create version history before updating
+        EnvironmentEntity environment = environmentRepository.findById(
+                        com.devkit.environments.domain.vo.EnvironmentId.of(configuration.getEnvironmentId()))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Environment not found: " + configuration.getEnvironmentId()));
+
+        String applicationId = environment.getApplicationId();
+        String currentValue = configuration.getEncryptedValue() != null
+                ? configuration.getEncryptedValue()
+                : configuration.getValue();
+
         var version = ConfigurationVersionEntity.create(
                 configuration.getVersionNumber(),
-                configuration.getValue(),
+                currentValue,
                 "UPDATE",
                 "SYSTEM",
                 configuration
         );
         configuration.addVersion(version);
 
-        // Update fields
         if (cmd.value() != null) {
-            configuration.updateValue(cmd.value());
+            if (Boolean.TRUE.equals(cmd.isSecret())) {
+                encryptConfigurationValue(configuration, applicationId, cmd.value());
+            } else {
+                configuration.updateValue(cmd.value());
+            }
         }
 
         if (cmd.type() != null) {
             configuration.updateType(cmd.type());
         }
 
-        // Description is updated directly via reflection in a real impl,
-        // but for now we'll skip since the entity doesn't have an updateDescription method
-        // This will be handled at the entity level if needed
-
         if (cmd.isSecret() != null) {
             if (cmd.isSecret()) {
                 configuration.markAsSecret();
+                if (configuration.getValue() != null && configuration.getEncryptedValue() == null) {
+                    encryptConfigurationValue(configuration, applicationId, configuration.getValue());
+                }
             } else {
                 configuration.markAsNonSecret();
             }
@@ -110,10 +151,6 @@ public class ConfigurationCommandService {
         ));
     }
 
-    /**
-     * Delete a configuration.
-     * @param configurationId the ID of the configuration to delete
-     */
     public void deleteConfiguration(String configurationId) {
         var configuration = configurationRepository.findById(ConfigurationId.of(configurationId))
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -130,30 +167,18 @@ public class ConfigurationCommandService {
         ));
     }
 
-    /**
-     * Bulk update configurations for an environment.
-     * @param environmentId the environment ID
-     * @param configurations list of configurations to update/create
-     */
     public void bulkUpsertConfigurations(String environmentId, List<CreateConfigurationCmd> configurations) {
         for (var cmd : configurations) {
             configurationRepository.findByEnvironmentIdAndKey(environmentId, cmd.key())
                     .ifPresentOrElse(
-                            existing -> {
-                                // Update existing
-                                var updateCmd = new UpdateConfigurationCmd(
-                                        existing.getId().id(),
-                                        cmd.value(),
-                                        cmd.type(),
-                                        cmd.description(),
-                                        cmd.isSecret()
-                                );
-                                updateConfiguration(updateCmd);
-                            },
-                            () -> {
-                                // Create new
-                                createConfiguration(cmd);
-                            }
+                            existing -> updateConfiguration(new UpdateConfigurationCmd(
+                                    existing.getId().id(),
+                                    cmd.value(),
+                                    cmd.type(),
+                                    cmd.description(),
+                                    cmd.isSecret()
+                            )),
+                            () -> createConfiguration(cmd)
                     );
         }
     }

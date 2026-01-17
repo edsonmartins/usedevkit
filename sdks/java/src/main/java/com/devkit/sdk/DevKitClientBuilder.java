@@ -1,5 +1,6 @@
 package com.devkit.sdk;
 
+import com.devkit.sdk.crypto.CryptoUtil;
 import com.devkit.sdk.http.HttpClient;
 
 /**
@@ -12,6 +13,7 @@ public class DevKitClientBuilder {
     private int timeoutMs = 10_000;
     private long cacheExpireMs = 60_000; // 1 minute
     private boolean enableCache = true;
+    private String encryptionKey;
 
     public static DevKitClientBuilder create() {
         return new DevKitClientBuilder();
@@ -39,6 +41,24 @@ public class DevKitClientBuilder {
 
     public DevKitClientBuilder enableCache(boolean enable) {
         this.enableCache = enable;
+        return this;
+    }
+
+    /**
+     * Sets the application encryption key for client-side decryption.
+     * <p>
+     * The encryption key is required to decrypt secrets and encrypted configurations.
+     * It can be obtained from:
+     * <ul>
+     *   <li>Environment variable: DEVKIT_ENCRYPTION_KEY</li>
+     *   <li>Programmatically via this method</li>
+     * </ul>
+     *
+     * @param encryptionKey Base64-encoded application encryption key
+     * @return this builder
+     */
+    public DevKitClientBuilder encryptionKey(String encryptionKey) {
+        this.encryptionKey = encryptionKey;
         return this;
     }
 
@@ -90,5 +110,9 @@ public class DevKitClientBuilder {
 
     public boolean isCacheEnabled() {
         return enableCache;
+    }
+
+    public String getEncryptionKey() {
+        return encryptionKey;
     }
 }

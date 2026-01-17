@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>DevKit Java SDK</name>
-    <description>Java client library for DevKit - Configuration Management & Feature Flags Platform</description>
+    <description>Java client library for DevKit - Configuration Management and Feature Flags Platform</description>
     <url>https://usedevkit.com</url>
 
     <licenses>

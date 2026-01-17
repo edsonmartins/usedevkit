@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * Repository for EnvironmentEntity aggregate root.
  */
-interface EnvironmentRepository extends JpaRepository<EnvironmentEntity, EnvironmentId> {
+public interface EnvironmentRepository extends JpaRepository<EnvironmentEntity, EnvironmentId> {
 
     @Query("""
             SELECT e FROM EnvironmentEntity e

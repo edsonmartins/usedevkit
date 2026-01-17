@@ -1,9 +1,11 @@
 package com.devkit.secrets.domain;
 
+import com.devkit.applications.domain.ApplicationEncryptionKeyRepository;
 import com.devkit.secrets.domain.events.*;
 import com.devkit.secrets.domain.vo.SecretId;
 import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.shared.domain.SpringEventPublisher;
+import com.devkit.shared.security.EncryptionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,32 +21,34 @@ public class SecretCommandService {
     private final SecretRepository secretRepository;
     private final SecretRotationRepository secretRotationRepository;
     private final SpringEventPublisher eventPublisher;
+    private final ApplicationEncryptionKeyRepository encryptionKeyRepository;
+    private final EncryptionService encryptionService;
 
     SecretCommandService(
             SecretRepository secretRepository,
             SecretRotationRepository secretRotationRepository,
-            SpringEventPublisher eventPublisher) {
+            SpringEventPublisher eventPublisher,
+            ApplicationEncryptionKeyRepository encryptionKeyRepository,
+            EncryptionService encryptionService) {
         this.secretRepository = secretRepository;
         this.secretRotationRepository = secretRotationRepository;
         this.eventPublisher = eventPublisher;
+        this.encryptionKeyRepository = encryptionKeyRepository;
+        this.encryptionService = encryptionService;
     }
 
-    /**
-     * Create a new secret.
-     * @param cmd the command containing secret details
-     * @return the ID of the created secret
-     */
     public String createSecret(CreateSecretCmd cmd) {
-        // Check if secret with same key already exists
         secretRepository.findByApplicationIdAndKey(cmd.applicationId(), cmd.key())
                 .ifPresent(existing -> {
                     throw new IllegalArgumentException(
                             "Secret with key '" + cmd.key() + "' already exists for this application");
                 });
 
+        String encryptedValue = encryptSecretValue(cmd.applicationId(), cmd.value());
+
         var secret = SecretEntity.create(
                 cmd.key(),
-                cmd.encryptedValue(),
+                encryptedValue,
                 cmd.description(),
                 cmd.applicationId(),
                 cmd.environmentId(),
@@ -62,17 +66,17 @@ public class SecretCommandService {
         return secret.getId().id();
     }
 
-    /**
-     * Update an existing secret.
-     * @param cmd the command containing updated secret details
-     */
     public void updateSecret(UpdateSecretCmd cmd) {
         var secret = secretRepository.findById(SecretId.of(cmd.secretId()))
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Secret not found with id: " + cmd.secretId()));
 
+        String encryptedValue = cmd.value() != null
+                ? encryptSecretValue(secret.getApplicationId(), cmd.value())
+                : null;
+
         secret.updateDetails(
-            cmd.encryptedValue(),
+            encryptedValue,
             cmd.description(),
             cmd.rotationPolicy(),
             cmd.applicationId(),
@@ -81,31 +85,25 @@ public class SecretCommandService {
         secretRepository.save(secret);
     }
 
-    /**
-     * Rotate a secret.
-     * @param cmd the command containing rotation details
-     */
     public String rotateSecret(RotateSecretCmd cmd) {
         var secret = secretRepository.findById(SecretId.of(cmd.secretId()))
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Secret not found with id: " + cmd.secretId()));
 
-        // Store previous value and version for audit
         String previousValue = secret.getEncryptedValue();
         Integer previousVersion = secret.getVersionNumber();
+        String newEncryptedValue = encryptSecretValue(secret.getApplicationId(), cmd.newValue());
 
-        // Rotate the secret
-        secret.rotate(cmd.newEncryptedValue(), cmd.rotatedBy());
+        secret.rotate(newEncryptedValue, cmd.rotatedBy());
         secretRepository.save(secret);
 
-        // Create rotation history entry
         var rotationHistory = SecretRotationEntity.createSuccess(
                 secret.getId().id(),
                 secret.getKey(),
                 secret.getApplicationId(),
                 secret.getEnvironmentId(),
                 previousValue,
-                cmd.newEncryptedValue(),
+                newEncryptedValue,
                 previousVersion,
                 secret.getVersionNumber(),
                 cmd.rotatedBy(),
@@ -113,7 +111,6 @@ public class SecretCommandService {
         );
         secretRotationRepository.save(rotationHistory);
 
-        // Publish event
         eventPublisher.publish(new SecretRotatedEvent(
                 secret.getId().id(),
                 secret.getKey(),
@@ -126,10 +123,19 @@ public class SecretCommandService {
         return secret.getId().id();
     }
 
-    /**
-     * Deactivate a secret.
-     * @param secretId the ID of the secret to deactivate
-     */
+    private String encryptSecretValue(String applicationId, String plaintextValue) {
+        var encryptionKey = encryptionKeyRepository.findLatestActiveByApplicationId(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Application encryption key not found. Please create an encryption key for this application first."));
+
+        String applicationKey = encryptionService.unwrapApplicationKey(encryptionKey.getEncryptedKey());
+        return encryptionService.encryptForApp(
+                plaintextValue,
+                applicationKey,
+                encryptionKey.getSalt()
+        );
+    }
+
     public void deactivateSecret(String secretId) {
         var secret = secretRepository.findById(SecretId.of(secretId))
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -146,10 +152,6 @@ public class SecretCommandService {
         ));
     }
 
-    /**
-     * Delete a secret.
-     * @param secretId the ID of the secret to delete
-     */
     public void deleteSecret(String secretId) {
         var secret = secretRepository.findById(SecretId.of(secretId))
                 .orElseThrow(() -> new ResourceNotFoundException(

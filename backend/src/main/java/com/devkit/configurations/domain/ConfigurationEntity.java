@@ -29,8 +29,11 @@ public class ConfigurationEntity extends BaseEntity {
     @Column(name = "key", nullable = false, length = 255)
     private String key;
 
-    @Column(name = "value", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "value", columnDefinition = "TEXT")
     private String value;
+
+    @Column(name = "encrypted_value", columnDefinition = "TEXT")
+    private String encryptedValue;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 20)
@@ -106,6 +109,32 @@ public class ConfigurationEntity extends BaseEntity {
         this.versionNumber++;
     }
 
+    public void updateEncryptedValue(String encryptedValue) {
+        this.encryptedValue = AssertUtil.requireNotNull(encryptedValue, "Encrypted value cannot be null");
+        this.value = null; // Clear plaintext value for secrets
+        this.versionNumber++;
+    }
+
+    /**
+     * Sets encrypted value directly without incrementing versionNumber.
+     * Package-private for internal use by ConfigurationCommandService.
+     * WARNING: Use only for initial value setting during entity creation.
+     * For normal updates, use updateEncryptedValue() instead.
+     */
+    void setEncryptedValueDirectly(String encryptedValue) {
+        this.encryptedValue = encryptedValue;
+    }
+
+    /**
+     * Sets value directly without incrementing versionNumber.
+     * Package-private for internal use by ConfigurationCommandService.
+     * WARNING: Use only for initial value setting or clearing during entity creation.
+     * For normal updates, use updateValue() instead.
+     */
+    void setValueDirectly(String value) {
+        this.value = value;
+    }
+
     public void updateType(ConfigType type) {
         this.type = AssertUtil.requireNotNull(type, "Configuration type cannot be null");
     }
@@ -155,7 +184,8 @@ public class ConfigurationEntity extends BaseEntity {
         return tenantId;
     }
 
-    public void setTenantId(Long tenantId) {
+    // Package-private setter for tenant filtering
+    void setTenantId(Long tenantId) {
         this.tenantId = tenantId;
     }
 
@@ -169,5 +199,9 @@ public class ConfigurationEntity extends BaseEntity {
 
     public int getVersion() {
         return version;
+    }
+
+    public String getEncryptedValue() {
+        return encryptedValue;
     }
 }

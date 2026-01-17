@@ -13,6 +13,7 @@ import { useUIStore } from "@/lib/stores/ui-store";
 import { cn, formatRelativeTime, copyToClipboard } from "@/lib/utils";
 import { toast } from "sonner";
 import { EnvironmentSelector } from "@/components/applications/environment-selector";
+import { EncryptionKeyManager } from "@/components/applications/encryption-key-manager";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,15 +75,19 @@ export default function ApplicationDetailPage() {
     if (!apiKeyName) return;
 
     try {
-      // This would call the API to create an API key
-      // For now, we'll simulate it
-      const prefix = `dk_${Math.random().toString(36).substring(2, 8)}`;
-      const key = `${prefix}${Math.random().toString(36).substring(2, 18)}${Math.random().toString(36).substring(2, 18)}`;
-
-      setNewApiKey({ key, prefix });
-      toast.success("API Key created successfully");
+      // TODO: Implement API key creation endpoint
+      // This feature is not yet implemented - requires backend API endpoint
+      toast.error(
+        "API Key creation is not yet implemented. " +
+        "Please contact your administrator to create API keys."
+      );
     } catch (error) {
-      toast.error("Failed to create API Key");
+      console.error("Failed to create API key:", error);
+      toast.error(
+        error instanceof Error
+          ? `Failed to create API Key: ${error.message}`
+          : "Failed to create API Key"
+      );
     }
   };
 
@@ -144,6 +149,10 @@ export default function ApplicationDetailPage() {
         <TabsList className="bg-terminal-surface border border-terminal-border">
           <TabsTrigger value="overview" className="data-[state=active]:bg-terminal-border/50">
             Overview
+          </TabsTrigger>
+          <TabsTrigger value="encryption" className="data-[state=active]:bg-terminal-border/50">
+            <Key className="mr-2 h-4 w-4" />
+            Encryption
           </TabsTrigger>
           <TabsTrigger value="keys" className="data-[state=active]:bg-terminal-border/50">
             API Keys
@@ -210,6 +219,14 @@ export default function ApplicationDetailPage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Encryption Key Tab */}
+        <TabsContent value="encryption" className="space-y-6">
+          <EncryptionKeyManager
+            applicationId={applicationId}
+            applicationName={application.name}
+          />
         </TabsContent>
 
         {/* API Keys Tab */}

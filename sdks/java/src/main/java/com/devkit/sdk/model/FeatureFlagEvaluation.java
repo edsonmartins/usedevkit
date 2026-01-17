@@ -8,11 +8,20 @@ public record FeatureFlagEvaluation(
     String variantKey,
     String reason
 ) {
-    public static FeatureFlagEvaluation enabled() {
+    public FeatureFlagEvaluation {
+        // Invariant: variantKey can only be present when the flag is enabled
+        if (variantKey != null && !enabled) {
+            throw new IllegalArgumentException(
+                "variantKey can only be present when enabled is true"
+            );
+        }
+    }
+
+    public static FeatureFlagEvaluation createEnabled() {
         return new FeatureFlagEvaluation(true, null, "FLAG_ENABLED");
     }
 
-    public static FeatureFlagEvaluation disabled() {
+    public static FeatureFlagEvaluation createDisabled() {
         return new FeatureFlagEvaluation(false, null, "FLAG_DISABLED");
     }
 

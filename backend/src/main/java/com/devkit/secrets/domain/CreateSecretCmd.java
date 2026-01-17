@@ -4,10 +4,11 @@ import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 
 /**
  * Command to create a new secret.
+ * The value will be encrypted using the application's encryption key.
  */
 public record CreateSecretCmd(
     String key,
-    String encryptedValue,
+    String value,
     String description,
     String applicationId,
     String environmentId,
@@ -17,8 +18,8 @@ public record CreateSecretCmd(
         if (key == null || key.isBlank()) {
             throw new IllegalArgumentException("Secret key cannot be null or empty");
         }
-        if (encryptedValue == null || encryptedValue.isBlank()) {
-            throw new IllegalArgumentException("Secret encrypted value cannot be null or empty");
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Secret value cannot be null or empty");
         }
         if (applicationId == null || applicationId.isBlank()) {
             throw new IllegalArgumentException("Application ID cannot be null or empty");

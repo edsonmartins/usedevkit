@@ -13,7 +13,8 @@ export class Cache<T> {
     });
   }
 
-  get(key: string): T | undefined {
+  // Allow type override when getting values for better type safety
+  get<U = T>(key: string): U | undefined {
     const entry = this.cache.get(key);
     if (!entry) return undefined;
 
@@ -22,7 +23,7 @@ export class Cache<T> {
       return undefined;
     }
 
-    return entry.value;
+    return entry.value as unknown as U;
   }
 
   invalidate(key: string): void {

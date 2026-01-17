@@ -4,9 +4,10 @@ import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 
 /**
  * REST Request to update a secret.
+ * The value will be encrypted server-side using the application's encryption key.
  */
 public record UpdateSecretRequest(
-    String encryptedValue,
+    String value,
     String description,
     RotationPolicy rotationPolicy,
     String applicationId,

@@ -83,15 +83,18 @@ public class ConfigurationQueryService {
 
     /**
      * Get all configurations as a map (for SDK consumption).
+     * For secrets, returns the encrypted value.
+     * The SDK should decrypt secrets using the application's encryption key.
+     *
      * @param environmentId the environment ID
-     * @return map of configuration key to value
+     * @return map of configuration key to value (or encrypted value for secrets)
      */
     public java.util.Map<String, String> getConfigurationMap(String environmentId) {
         return configurationRepository.findByEnvironmentId(environmentId)
                 .stream()
                 .collect(Collectors.toMap(
                         ConfigurationEntity::getKey,
-                        ConfigurationEntity::getValue
+                        e -> e.getEncryptedValue() != null ? e.getEncryptedValue() : e.getValue()
                 ));
     }
 

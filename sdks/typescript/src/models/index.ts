@@ -2,6 +2,7 @@ export interface Configuration {
   id: string;
   key: string;
   value: string;
+  encryptedValue?: string;
   type: string;
   description: string | null;
   environmentId: string;
@@ -51,4 +52,10 @@ export interface DevKitOptions {
   timeout?: number;
   cacheExpireAfter?: number;
   enableCache?: boolean;
+  /**
+   * Application encryption key for client-side decryption.
+   * Can be provided via this option or via DEVKIT_ENCRYPTION_KEY environment variable.
+   * Must be a Base64-encoded 256-bit key.
+   */
+  encryptionKey?: string;
 }
