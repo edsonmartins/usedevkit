@@ -14,6 +14,11 @@ import java.time.Instant;
 @Table(name = "template_versions")
 public class TemplateVersionEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_id", nullable = false)
     private TemplateEntity template;
@@ -89,6 +94,10 @@ public class TemplateVersionEntity extends BaseEntity {
     }
 
     // Getters
+    public Long getId() {
+        return id;
+    }
+
     public TemplateEntity getTemplate() {
         return template;
     }

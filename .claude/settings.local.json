@@ -26,7 +26,16 @@
       "Bash(source:*)",
       "Bash(mvn compile:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Skill(design-engineer:init)",
+      "Skill(frontend-design)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm dev)",
+      "Bash(mvn spring-boot:run:*)",
+      "Bash(done:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(PORT=3001 pnpm dev:*)"
     ],
     "deny": [],
     "ask": []

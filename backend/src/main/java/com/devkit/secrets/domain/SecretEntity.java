@@ -53,7 +53,7 @@ public class SecretEntity extends BaseEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @Column(name = "version", nullable = false)
+    @Column(name = "secret_version", nullable = false)
     private Integer versionNumber;
 
     @Version

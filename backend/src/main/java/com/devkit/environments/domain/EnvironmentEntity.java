@@ -1,13 +1,9 @@
 package com.devkit.environments.domain;
 
-import com.devkit.configurations.domain.ConfigurationEntity;
 import com.devkit.environments.domain.vo.EnvironmentId;
 import com.devkit.shared.domain.AssertUtil;
 import com.devkit.shared.domain.BaseEntity;
 import jakarta.persistence.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Represents an Environment (e.g., development, staging, production).
@@ -40,9 +36,6 @@ public class EnvironmentEntity extends BaseEntity {
 
     @Transient
     private EnvironmentEntity inheritFrom;
-
-    @OneToMany(mappedBy = "environment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ConfigurationEntity> configurations = new HashSet<>();
 
     @Version
     private int version;
@@ -125,10 +118,6 @@ public class EnvironmentEntity extends BaseEntity {
 
     public EnvironmentEntity getInheritFrom() {
         return inheritFrom;
-    }
-
-    public Set<ConfigurationEntity> getConfigurations() {
-        return Set.copyOf(configurations);
     }
 
     public int getVersion() {

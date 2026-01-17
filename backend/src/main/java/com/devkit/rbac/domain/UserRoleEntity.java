@@ -13,6 +13,11 @@ import java.time.Instant;
 @Table(name = "user_roles")
 public class UserRoleEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "tenant_id", nullable = false)
     private Long tenantId;
 
@@ -83,6 +88,10 @@ public class UserRoleEntity extends BaseEntity {
     }
 
     // Getters
+    public Long getId() {
+        return id;
+    }
+
     public Long getTenantId() {
         return tenantId;
     }

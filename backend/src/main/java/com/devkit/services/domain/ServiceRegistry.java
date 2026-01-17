@@ -32,7 +32,7 @@ public class ServiceRegistry {
      */
     public String registerService(ServiceEntity service) {
         // Check if service already exists
-        Optional<ServiceEntity> existing = serviceRepository.findByNameAndVersion(
+        Optional<ServiceEntity> existing = serviceRepository.findByNameAndServiceVersion(
             service.getName(),
             service.getVersion()
         );
@@ -70,7 +70,7 @@ public class ServiceRegistry {
      * Get service by name and version.
      */
     public ServiceEntity getServiceByNameAndVersion(String name, String version) {
-        return serviceRepository.findByNameAndVersion(name, version)
+        return serviceRepository.findByNameAndServiceVersion(name, version)
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Service not found: " + name + " v" + version
             ));

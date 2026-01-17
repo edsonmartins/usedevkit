@@ -22,6 +22,11 @@ public class ServiceDependencyEntity extends BaseEntity {
         HTTP, GRPC, MESSAGE_QUEUE, DATABASE, CACHE, SYNC
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "source_service_id", nullable = false, length = 255)
     private String sourceServiceId;
 
@@ -87,6 +92,10 @@ public class ServiceDependencyEntity extends BaseEntity {
     }
 
     // Getters
+    public Long getId() {
+        return id;
+    }
+
     public ServiceEntity getSourceService() {
         return sourceService;
     }

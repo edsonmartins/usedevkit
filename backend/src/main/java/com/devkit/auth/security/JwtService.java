@@ -23,8 +23,9 @@ public class JwtService {
             @Value("${devkit.security.jwt.access-token-expiration:900000}") long accessTokenExpiration,
             @Value("${devkit.security.jwt.refresh-token-expiration:604800000}") long refreshTokenExpiration) {
 
-        if (jwtSecret == null || jwtSecret.length() < 512) {
-            throw new IllegalArgumentException("JWT secret must be at least 512 bits (64 bytes) for HS512");
+        // Check for minimum 512 bits (64 bytes) for HS512
+        if (jwtSecret == null || jwtSecret.isEmpty() || jwtSecret.length() < 64) {
+            throw new IllegalArgumentException("JWT secret must be at least 512 bits (64 bytes) for HS512. Current length: " + (jwtSecret == null ? "null" : jwtSecret.length()));
         }
 
         this.signingKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());

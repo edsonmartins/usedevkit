@@ -46,18 +46,6 @@ public interface TenantRepository extends JpaRepository<TenantEntity, Long>, Jpa
     boolean existsBySlug(String slug);
 
     /**
-     * Find tenants on trial period.
-     */
-    @Query("SELECT t FROM TenantEntity t WHERE t.plan = 'FREE' AND t.isActive = true AND t.createdAt > :trialStartDate")
-    List<TenantEntity> findTrialTenants(@Param("trialStartDate") java.time.Instant trialStartDate);
-
-    /**
-     * Find tenants with expiring trials (within 7 days).
-     */
-    @Query("SELECT t FROM TenantEntity t WHERE t.plan = 'FREE' AND t.isActive = true AND t.trialEndsAt BETWEEN :now AND :weekFromNow")
-    List<TenantEntity> findTenantsWithExpiringTrials(@Param("now") java.time.Instant now, @Param("weekFromNow") java.time.Instant weekFromNow);
-
-    /**
      * Find tenants by owner email.
      */
     @Query("SELECT t FROM TenantEntity t JOIN t.users tu WHERE tu.userId = :userId AND tu.role = 'OWNER'")

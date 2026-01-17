@@ -48,7 +48,7 @@ public class ConfigurationEntity extends BaseEntity {
     @Column(name = "tenant_id")
     private Long tenantId;
 
-    @Column(name = "version", nullable = false)
+    @Column(name = "config_version", nullable = false)
     private Integer versionNumber;
 
     @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL, orphanRemoval = true)

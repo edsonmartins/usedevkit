@@ -53,7 +53,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, ServiceI
     /**
      * Find services by name and version.
      */
-    Optional<ServiceEntity> findByNameAndVersion(String name, String version);
+    Optional<ServiceEntity> findByNameAndServiceVersion(String name, String version);
 
     /**
      * Find services by language.

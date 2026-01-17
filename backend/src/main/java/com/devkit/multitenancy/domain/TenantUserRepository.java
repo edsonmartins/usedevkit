@@ -18,17 +18,20 @@ public interface TenantUserRepository extends JpaRepository<TenantUserEntity, Lo
     /**
      * Find all users for a tenant.
      */
-    List<TenantUserEntity> findByTenantId(Long tenantId);
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId")
+    List<TenantUserEntity> findByTenantId(@Param("tenantId") Long tenantId);
 
     /**
      * Find a user in a tenant.
      */
-    Optional<TenantUserEntity> findByTenantIdAndUserId(Long tenantId, String userId);
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.userId = :userId")
+    Optional<TenantUserEntity> findByTenantIdAndUserId(@Param("tenantId") Long tenantId, @Param("userId") String userId);
 
     /**
      * Find users by role in a tenant.
      */
-    List<TenantUserEntity> findByTenantIdAndRole(Long tenantId, TenantUserEntity.TenantRole role);
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.role = :role")
+    List<TenantUserEntity> findByTenantIdAndRole(@Param("tenantId") Long tenantId, @Param("role") TenantUserEntity.TenantRole role);
 
     /**
      * Find all tenants where a user is a member.
@@ -38,44 +41,49 @@ public interface TenantUserRepository extends JpaRepository<TenantUserEntity, Lo
     /**
      * Find all active users in a tenant.
      */
-    List<TenantUserEntity> findByTenantIdAndIsActiveTrue(Long tenantId);
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.isActive = true")
+    List<TenantUserEntity> findByTenantIdAndIsActiveTrue(@Param("tenantId") Long tenantId);
 
     /**
      * Count users in a tenant.
      */
-    long countByTenantId(Long tenantId);
+    @Query("SELECT COUNT(tu) FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId")
+    long countByTenantId(@Param("tenantId") Long tenantId);
 
     /**
      * Count active users in a tenant.
      */
-    long countByTenantIdAndIsActiveTrue(Long tenantId);
+    @Query("SELECT COUNT(tu) FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.isActive = true")
+    long countByTenantIdAndIsActiveTrue(@Param("tenantId") Long tenantId);
 
     /**
      * Count users by role in a tenant.
      */
-    long countByTenantIdAndRole(Long tenantId, TenantUserEntity.TenantRole role);
+    @Query("SELECT COUNT(tu) FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.role = :role")
+    long countByTenantIdAndRole(@Param("tenantId") Long tenantId, @Param("role") TenantUserEntity.TenantRole role);
 
     /**
      * Check if a user is a member of a tenant.
      */
-    boolean existsByTenantIdAndUserId(Long tenantId, String userId);
+    @Query("SELECT CASE WHEN COUNT(tu) > 0 THEN true ELSE false END FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.userId = :userId")
+    boolean existsByTenantIdAndUserId(@Param("tenantId") Long tenantId, @Param("userId") String userId);
 
     /**
      * Find tenant owners.
      */
-    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenantId = :tenantId AND tu.role = 'OWNER' AND tu.isActive = true")
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.role = 'OWNER' AND tu.isActive = true")
     List<TenantUserEntity> findTenantOwners(@Param("tenantId") Long tenantId);
 
     /**
      * Find tenant admins (owners + admins).
      */
-    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenantId = :tenantId AND (tu.role = 'OWNER' OR tu.role = 'ADMIN') AND tu.isActive = true")
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND (tu.role = 'OWNER' OR tu.role = 'ADMIN') AND tu.isActive = true")
     List<TenantUserEntity> findTenantAdmins(@Param("tenantId") Long tenantId);
 
     /**
      * Find users invited but not yet joined.
      */
-    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenantId = :tenantId AND tu.isActive = false AND tu.invitedAt IS NOT NULL")
+    @Query("SELECT tu FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.isActive = false AND tu.invitedAt IS NOT NULL")
     List<TenantUserEntity> findPendingInvitations(@Param("tenantId") Long tenantId);
 
     /**
@@ -87,6 +95,6 @@ public interface TenantUserRepository extends JpaRepository<TenantUserEntity, Lo
     /**
      * Check if a user has admin role in a tenant.
      */
-    @Query("SELECT CASE WHEN COUNT(tu) > 0 THEN true ELSE false END FROM TenantUserEntity tu WHERE tu.tenantId = :tenantId AND tu.userId = :userId AND (tu.role = 'OWNER' OR tu.role = 'ADMIN') AND tu.isActive = true")
+    @Query("SELECT CASE WHEN COUNT(tu) > 0 THEN true ELSE false END FROM TenantUserEntity tu WHERE tu.tenant.id = :tenantId AND tu.userId = :userId AND (tu.role = 'OWNER' OR tu.role = 'ADMIN') AND tu.isActive = true")
     boolean isUserAdminInTenant(@Param("tenantId") Long tenantId, @Param("userId") String userId);
 }

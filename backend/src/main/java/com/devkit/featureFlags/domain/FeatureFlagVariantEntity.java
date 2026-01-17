@@ -12,6 +12,7 @@ import jakarta.persistence.*;
 @Table(name = "feature_flag_variants")
 public class FeatureFlagVariantEntity extends BaseEntity {
 
+    @Id
     @Column(name = "id", nullable = false)
     private String id;
 
