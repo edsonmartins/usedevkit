@@ -1,149 +1,235 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 920">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16a34a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="backendGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="frontendGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sdkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
   <!-- Background -->
-  <rect width="800" height="920" fill="#ffffff"/>
+  <rect width="900" height="700" fill="#0d1117"/>
+
+  <!-- Grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1f2937" stroke-width="0.5"/>
+  </pattern>
+  <rect width="900" height="700" fill="url(#grid)"/>
 
   <!-- Title -->
-  <text x="400" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#1F2937" text-anchor="middle">DevKit Architecture</text>
-  <text x="400" y="65" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" text-anchor="middle">Multi-Tenancy & RBAC Platform</text>
+  <text x="450" y="45" font-family="JetBrains Mono, monospace" font-size="24" font-weight="bold" fill="#22c55e" text-anchor="middle" filter="url(#glow)">DevKit Architecture</text>
+  <text x="450" y="70" font-family="JetBrains Mono, monospace" font-size="13" fill="#6b7280" text-anchor="middle">&lt;Configuration Platform /&gt;</text>
 
-  <!-- CLIENT APPLICATIONS LAYER -->
-  <rect x="50" y="100" width="700" height="120" rx="8" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
-  <text x="400" y="125" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1E40AF" text-anchor="middle">CLIENT APPLICATIONS</text>
+  <!-- Connection Lines (behind everything) -->
+  <g stroke="#374151" stroke-width="2" fill="none">
+    <!-- From SDKs to Center -->
+    <path d="M 150 200 Q 250 250 300 300"/>
+    <path d="M 150 350 L 300 350"/>
+    <path d="M 150 500 Q 250 450 300 400"/>
 
-  <!-- Java App -->
-  <rect x="80" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="145" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Java App</text>
-  <text x="145" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Spring Boot SDK</text>
+    <!-- From Frontend to Center -->
+    <path d="M 750 200 Q 650 250 600 300"/>
+    <path d="M 750 350 L 600 350"/>
+    <path d="M 750 500 Q 650 450 600 400"/>
 
-  <!-- TypeScript App -->
-  <rect x="230" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="295" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">TypeScript</text>
-  <text x="295" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Node.js SDK</text>
+    <!-- From Database to Center -->
+    <path d="M 380 550 L 400 450"/>
+    <path d="M 450 550 L 450 450"/>
+    <path d="M 520 550 L 500 450"/>
+  </g>
 
-  <!-- Flutter App -->
-  <rect x="380" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="445" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Flutter</text>
-  <text x="445" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Mobile SDK</text>
+  <!-- ========== CENTER HUB: API GATEWAY / BACKEND ========== -->
+  <g>
+    <!-- Outer ring -->
+    <circle cx="450" cy="350" r="130" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="5,5" opacity="0.5"/>
+    <circle cx="450" cy="350" r="110" fill="none" stroke="#22c55e" stroke-width="2"/>
 
-  <!-- CLI Tool -->
-  <rect x="530" y="140" width="130" height="60" rx="6" fill="#3B82F6"/>
-  <text x="595" y="165" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">CLI Tool</text>
-  <text x="595" y="185" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Rust CLI</text>
+    <!-- Main circle -->
+    <circle cx="450" cy="350" r="90" fill="url(#backendGrad)"/>
 
-  <!-- SDKs Layer -->
-  <rect x="50" y="240" width="700" height="40" rx="6" fill="#8B5CF6"/>
-  <text x="400" y="265" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">SDKs (HTTP/REST API)</text>
+    <!-- Icon/Text in center -->
+    <text x="450" y="340" font-family="JetBrains Mono, monospace" font-size="14" font-weight="bold" fill="white" text-anchor="middle">SPRING BOOT</text>
+    <text x="450" y="360" font-family="JetBrains Mono, monospace" font-size="11" fill="white" text-anchor="middle">REST API</text>
+    <text x="450" y="378" font-family="JetBrains Mono, monospace" font-size="9" fill="#fef3c7" text-anchor="middle">40+ endpoints</text>
+  </g>
 
-  <!-- Arrow -->
-  <line x1="400" y1="280" x2="400" y2="310" stroke="#6B7280" stroke-width="2"/>
-  <polygon points="400,310 395,305 405,305" fill="#6B7280"/>
-
-  <!-- FRONTEND LAYER -->
-  <rect x="50" y="320" width="700" height="130" rx="8" fill="#F0FDF4" stroke="#10B981" stroke-width="2"/>
-  <text x="400" y="345" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#065F46" text-anchor="middle">NEXT.JS FRONTEND (React 19 + Tailwind CSS)</text>
-
-  <!-- Tenants Dashboard -->
-  <rect x="80" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="145" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Tenants</text>
-  <text x="145" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Multi-Tenancy</text>
-
-  <!-- Roles Dashboard -->
-  <rect x="230" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="295" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Roles</text>
-  <text x="295" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">RBAC</text>
-
-  <!-- Users Dashboard -->
-  <rect x="380" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="445" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Users</text>
-  <text x="445" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Management</text>
-
-  <!-- Config Dashboard -->
-  <rect x="530" y="360" width="130" height="60" rx="6" fill="#10B981"/>
-  <text x="595" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Configs</text>
-  <text x="595" y="405" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Settings</text>
-
-  <!-- Arrow -->
-  <line x1="400" y1="450" x2="400" y2="480" stroke="#6B7280" stroke-width="2"/>
-  <polygon points="400,480 395,475 405,475" fill="#6B7280"/>
-
-  <!-- BACKEND LAYER -->
-  <rect x="50" y="490" width="700" height="160" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
-  <text x="400" y="515" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400E" text-anchor="middle">SPRING BOOT 3.2 BACKEND (Java 17)</text>
-
-  <!-- Tenant API -->
-  <rect x="80" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="180" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Tenant API</text>
-  <text x="180" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">11 endpoints</text>
-
-  <!-- RBAC API -->
-  <rect x="80" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="180" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">RBAC API</text>
-  <text x="180" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">17 endpoints</text>
-
+  <!-- ========== BACKEND MODULES (orbiting center) ========== -->
   <!-- Config API -->
-  <rect x="300" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="400" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Config API</text>
-  <text x="400" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Management</text>
+  <g transform="translate(360, 260)">
+    <circle r="30" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-5" font-family="JetBrains Mono, monospace" font-size="9" fill="#f59e0b" text-anchor="middle">CONFIG</text>
+    <text x="0" y="8" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">API</text>
+  </g>
 
   <!-- Secrets API -->
-  <rect x="300" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="400" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Secrets API</text>
-  <text x="400" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">AES-256</text>
+  <g transform="translate(540, 260)">
+    <circle r="30" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-5" font-family="JetBrains Mono, monospace" font-size="9" fill="#f59e0b" text-anchor="middle">SECRETS</text>
+    <text x="0" y="8" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">API</text>
+  </g>
 
   <!-- Feature Flags API -->
-  <rect x="520" y="530" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="620" y="550" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Feature Flags</text>
-  <text x="620" y="565" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Rollouts</text>
+  <g transform="translate(360, 440)">
+    <circle r="30" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-5" font-family="JetBrains Mono, monospace" font-size="9" fill="#f59e0b" text-anchor="middle">FLAGS</text>
+    <text x="0" y="8" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">API</text>
+  </g>
 
-  <!-- Webhooks API -->
-  <rect x="520" y="585" width="200" height="45" rx="6" fill="#F59E0B"/>
-  <text x="620" y="605" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Webhooks</text>
-  <text x="620" y="620" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Notifications</text>
+  <!-- RBAC API -->
+  <g transform="translate(540, 440)">
+    <circle r="30" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+    <text x="0" y="-5" font-family="JetBrains Mono, monospace" font-size="9" fill="#f59e0b" text-anchor="middle">RBAC</text>
+    <text x="0" y="8" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">API</text>
+  </g>
 
-  <!-- Arrow -->
-  <line x1="400" y1="650" x2="400" y2="680" stroke="#6B7280" stroke-width="2"/>
-  <polygon points="400,680 395,675 405,675" fill="#6B7280"/>
+  <!-- ========== LEFT SIDE: SDKs ========== -->
+  <g>
+    <!-- Container -->
+    <rect x="40" y="150" width="180" height="400" rx="12" fill="#1f2937" stroke="#a855f7" stroke-width="2"/>
 
-  <!-- DATABASE LAYER -->
-  <rect x="50" y="690" width="700" height="180" rx="8" fill="#F3F4F6" stroke="#4B5563" stroke-width="2"/>
-  <text x="400" y="715" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937" text-anchor="middle">POSTGRESQL DATABASE (15+)</text>
+    <!-- Header -->
+    <text x="130" y="180" font-family="JetBrains Mono, monospace" font-size="13" font-weight="bold" fill="#a855f7" text-anchor="middle">SDKs</text>
 
-  <!-- Tenants Table -->
-  <rect x="80" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
-  <text x="145" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">tenants</text>
-  <text x="145" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Multi-tenant</text>
+    <!-- Java SDK -->
+    <rect x="60" y="200" width="140" height="60" rx="8" fill="url(#sdkGrad)"/>
+    <text x="130" y="225" font-family="JetBrains Mono, monospace" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Java</text>
+    <text x="130" y="242" font-family="JetBrains Mono, monospace" font-size="9" fill="#e9d5ff" text-anchor="middle">Spring Boot</text>
 
-  <!-- Roles Table -->
-  <rect x="230" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
-  <text x="295" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">roles</text>
-  <text x="295" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">RBAC</text>
+    <!-- TypeScript SDK -->
+    <rect x="60" y="275" width="140" height="60" rx="8" fill="url(#sdkGrad)"/>
+    <text x="130" y="300" font-family="JetBrains Mono, monospace" font-size="12" font-weight="bold" fill="white" text-anchor="middle">TypeScript</text>
+    <text x="130" y="317" font-family="JetBrains Mono, monospace" font-size="9" fill="#e9d5ff" text-anchor="middle">Node.js</text>
 
-  <!-- Permissions Table -->
-  <rect x="380" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
-  <text x="445" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">permissions</text>
-  <text x="445" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">38+ perms</text>
+    <!-- Flutter SDK -->
+    <rect x="60" y="350" width="140" height="60" rx="8" fill="url(#sdkGrad)"/>
+    <text x="130" y="375" font-family="JetBrains Mono, monospace" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Flutter</text>
+    <text x="130" y="392" font-family="JetBrains Mono, monospace" font-size="9" fill="#e9d5ff" text-anchor="middle">Mobile</text>
 
-  <!-- Secrets Table -->
-  <rect x="530" y="735" width="130" height="45" rx="6" fill="#4B5563"/>
-  <text x="595" y="755" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">secrets</text>
-  <text x="595" y="770" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="middle">Encrypted</text>
+    <!-- CLI -->
+    <rect x="60" y="425" width="140" height="60" rx="8" fill="url(#sdkGrad)"/>
+    <text x="130" y="450" font-family="JetBrains Mono, monospace" font-size="12" font-weight="bold" fill="white" text-anchor="middle">CLI</text>
+    <text x="130" y="467" font-family="JetBrains Mono, monospace" font-size="9" fill="#e9d5ff" text-anchor="middle">Rust</text>
 
-  <!-- Feature Flags Table -->
-  <rect x="80" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
-  <text x="145" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">feature_flags</text>
+    <!-- Features list -->
+    <text x="130" y="510" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">• Auto-configuration</text>
+    <text x="130" y="525" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">• Caching (60s TTL)</text>
+    <text x="130" y="540" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">• Type-safe</text>
+  </g>
 
-  <!-- Configs Table -->
-  <rect x="230" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
-  <text x="295" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">configurations</text>
+  <!-- ========== RIGHT SIDE: FRONTEND ========== -->
+  <g>
+    <!-- Container -->
+    <rect x="680" y="150" width="180" height="400" rx="12" fill="#1f2937" stroke="#06b6d4" stroke-width="2"/>
 
-  <!-- User Roles Table -->
-  <rect x="380" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
-  <text x="445" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">user_roles</text>
+    <!-- Header -->
+    <text x="770" y="180" font-family="JetBrains Mono, monospace" font-size="13" font-weight="bold" fill="#06b6d4" text-anchor="middle">Web UI</text>
 
-  <!-- Audit Logs Table -->
-  <rect x="530" y="790" width="130" height="35" rx="6" fill="#4B5563"/>
-  <text x="595" y="808" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">audit_logs</text>
+    <!-- Dashboard -->
+    <rect x="700" y="200" width="140" height="50" rx="8" fill="url(#frontendGrad)"/>
+    <text x="770" y="222" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Dashboard</text>
+    <text x="770" y="237" font-family="JetBrains Mono, monospace" font-size="8" fill="#cffafe" text-anchor="middle">Analytics</text>
+
+    <!-- Applications -->
+    <rect x="700" y="260" width="140" height="50" rx="8" fill="url(#frontendGrad)"/>
+    <text x="770" y="282" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Applications</text>
+    <text x="770" y="297" font-family="JetBrains Mono, monospace" font-size="8" fill="#cffafe" text-anchor="middle">Manage apps</text>
+
+    <!-- Configurations -->
+    <rect x="700" y="320" width="140" height="50" rx="8" fill="url(#frontendGrad)"/>
+    <text x="770" y="342" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Configs</text>
+    <text x="770" y="357" font-family="JetBrains Mono, monospace" font-size="8" fill="#cffafe" text-anchor="middle">Key-value store</text>
+
+    <!-- Secrets -->
+    <rect x="700" y="380" width="140" height="50" rx="8" fill="url(#frontendGrad)"/>
+    <text x="770" y="402" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Secrets</text>
+    <text x="770" y="417" font-family="JetBrains Mono, monospace" font-size="8" fill="#cffafe" text-anchor="middle">Encrypted storage</text>
+
+    <!-- Feature Flags -->
+    <rect x="700" y="440" width="140" height="50" rx="8" fill="url(#frontendGrad)"/>
+    <text x="770" y="462" font-family="JetBrains Mono, monospace" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Feature Flags</text>
+    <text x="770" y="477" font-family="JetBrains Mono, monospace" font-size="8" fill="#cffafe" text-anchor="middle">Rollouts</text>
+
+    <!-- Tech stack -->
+    <text x="770" y="515" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">Next.js 16</text>
+    <text x="770" y="530" font-family="JetBrains Mono, monospace" font-size="8" fill="#9ca3af" text-anchor="middle">React 19 + Tailwind</text>
+  </g>
+
+  <!-- ========== BOTTOM: DATABASE ========== -->
+  <g>
+    <!-- Container -->
+    <rect x="300" y="570" width="300" height="110" rx="12" fill="#1f2937" stroke="#6366f1" stroke-width="2"/>
+
+    <!-- Header -->
+    <text x="450" y="595" font-family="JetBrains Mono, monospace" font-size="12" font-weight="bold" fill="#6366f1" text-anchor="middle">PostgreSQL 15</text>
+
+    <!-- Tables grid -->
+    <g transform="translate(320, 610)">
+      <rect width="60" height="35" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="30" y="20" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">tenants</text>
+
+      <rect x="70" width="60" height="35" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="100" y="20" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">roles</text>
+
+      <rect x="140" width="60" height="35" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="170" y="20" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">configs</text>
+
+      <rect x="210" width="60" height="35" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="240" y="20" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">secrets</text>
+    </g>
+
+    <g transform="translate(320, 650)">
+      <rect width="80" height="25" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="40" y="15" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">feature_flags</text>
+
+      <rect x="90" width="80" height="25" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="130" y="15" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">user_roles</text>
+
+      <rect x="180" width="80" height="25" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+      <text x="220" y="15" font-family="JetBrains Mono, monospace" font-size="8" fill="#a5b4fc" text-anchor="middle">audit_logs</text>
+    </g>
+  </g>
+
+  <!-- ========== KEY FEATURES BADGES ========== -->
+  <g transform="translate(260, 95)">
+    <rect width="100" height="24" rx="12" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-width="1"/>
+    <text x="50" y="16" font-family="JetBrains Mono, monospace" font-size="9" fill="#22c55e" text-anchor="middle">JWT Auth</text>
+  </g>
+
+  <g transform="translate(375, 95)">
+    <rect width="100" height="24" rx="12" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1"/>
+    <text x="50" y="16" font-family="JetBrains Mono, monospace" font-size="9" fill="#f59e0b" text-anchor="middle">AES-256</text>
+  </g>
+
+  <g transform="translate(490, 95)">
+    <rect width="100" height="24" rx="12" fill="#a855f7" fill-opacity="0.2" stroke="#a855f7" stroke-width="1"/>
+    <text x="50" y="16" font-family="JetBrains Mono, monospace" font-size="9" fill="#a855f7" text-anchor="middle">Multi-tenant</text>
+  </g>
 
   <!-- Footer -->
-  <text x="400" y="895" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" text-anchor="middle">40+ REST APIs • 38+ Permissions • 4 Plans • Complete Isolation</text>
+  <text x="450" y="690" font-family="JetBrains Mono, monospace" font-size="10" fill="#4b5563" text-anchor="middle">Open Source • MIT License • Self-Hosted</text>
 </svg>
