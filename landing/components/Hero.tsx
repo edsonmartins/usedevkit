@@ -80,7 +80,7 @@ export default function Hero() {
               Docs
             </Link>
             <Link
-              href="https://github.com/devkit/devkit"
+              href="https://github.com/edsonmartins/usedevkit"
               target="_blank"
               className="flex items-center gap-2 px-4 py-2 bg-terminal-surface border border-terminal-border rounded hover:border-terminal-green transition-all"
             >
@@ -157,7 +157,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <Link
-                href="https://github.com/devkit/devkit"
+                href="https://github.com/edsonmartins/usedevkit"
                 target="_blank"
                 className="btn-primary group"
               >

@@ -26,7 +26,7 @@ const footerSections = [
   {
     title: 'Comunidade',
     links: [
-      { label: 'GitHub', href: 'https://github.com/devkit/devkit', external: true },
+      { label: 'GitHub', href: 'https://github.com/edsonmartins/usedevkit', external: true },
       { label: 'Discord', href: 'https://discord.gg/devkit', external: true },
       { label: 'Twitter', href: 'https://twitter.com/usedevkit', external: true },
       { label: 'Blog', href: '/blog' },
@@ -44,7 +44,7 @@ const footerSections = [
 ];
 
 const socialLinks = [
-  { icon: Github, href: 'https://github.com/devkit/devkit', label: 'GitHub' },
+  { icon: Github, href: 'https://github.com/edsonmartins/usedevkit', label: 'GitHub' },
   { icon: MessageCircle, href: 'https://discord.gg/devkit', label: 'Discord' },
   { icon: Twitter, href: 'https://twitter.com/usedevkit', label: 'Twitter' },
   { icon: Linkedin, href: 'https://linkedin.com/company/devkit', label: 'LinkedIn' },

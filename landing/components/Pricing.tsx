@@ -81,7 +81,7 @@ export default function Pricing() {
             {/* CTA */}
             <div className="text-center">
               <a
-                href="https://github.com/devkit/devkit"
+                href="https://github.com/edsonmartins/usedevkit"
                 target="_blank"
                 className="inline-flex items-center gap-3 px-8 py-4 bg-terminal-green text-terminal-bg font-bold text-lg rounded hover:scale-105 transition-transform"
               >

@@ -160,7 +160,7 @@ export default function ProblemSolution() {
             Mais de <span className="text-terminal-text font-bold">500 desenvolvedores</span> já abandonaram o pesadelo
           </p>
           <a
-            href="https://github.com/devkit/devkit"
+            href="https://github.com/edsonmartins/usedevkit"
             target="_blank"
             className="inline-flex items-center gap-2 px-6 py-3 bg-terminal-surface border border-terminal-green text-terminal-green rounded hover:bg-terminal-green hover:text-terminal-bg transition-all font-semibold"
           >

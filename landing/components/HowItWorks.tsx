@@ -9,7 +9,7 @@ const steps = [
     icon: Download,
     title: 'Deploy',
     description: 'Clone e rode com Docker Compose',
-    code: 'git clone https://github.com/devkit/devkit\ncd devkit\ndocker-compose up -d',
+    code: 'git clone https://github.com/edsonmartins/usedevkit\ncd devkit\ndocker-compose up -d',
     language: 'bash',
   },
   {
@@ -137,7 +137,7 @@ export default function HowItWorks() {
           className="mt-16 text-center"
         >
           <a
-            href="https://github.com/devkit/devkit"
+            href="https://github.com/edsonmartins/usedevkit"
             target="_blank"
             className="inline-flex items-center gap-3 px-8 py-4 bg-terminal-green text-terminal-bg font-bold rounded hover:scale-105 transition-transform"
           >

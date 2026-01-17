@@ -16,7 +16,7 @@ const ctas = [
     icon: Star,
     title: 'Star no GitHub',
     description: 'Mostre seu apoio e ajude o projeto crescer',
-    href: 'https://github.com/devkit/devkit',
+    href: 'https://github.com/edsonmartins/usedevkit',
     primary: true,
   },
   {
