@@ -128,8 +128,8 @@ Get DevKit running in under 5 minutes with Docker Compose!
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/usedevkit.com.git
-cd usedevkit.com
+git clone https://github.com/edsonmartins/usedevkit.git
+cd usedevkit
 ```
 
 ### 2. Configure Environment Variables
@@ -165,7 +165,32 @@ docker-compose logs -f backend
 - 📚 **Swagger Documentation**: http://localhost:8080/swagger-ui.html
 - ❤️ **Health Check**: http://localhost:8080/actuator/health
 
-**That's it!** DevKit is now running. Continue to [Usage](#usage) to create your first application and configuration.
+### 5. Initial Setup (First Time Only)
+
+On your first access, DevKit will automatically redirect you to the **Setup Wizard**:
+
+1. Navigate to http://localhost:3000
+2. You'll be redirected to `/setup` automatically
+3. Fill in your organization details:
+   - **Organization Name:** Your company name
+   - **Admin Email:** Your administrator email
+   - **Application Name:** Name of your first application
+4. Click "Complete Setup"
+5. **Important:** Copy the generated API Key - it will only be shown once!
+6. Use this API Key to log in at `/login`
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    FIRST ACCESS                          │
+│  1. Access http://localhost:3000                         │
+│  2. Redirected to /setup (wizard)                        │
+│  3. Fill organization details                            │
+│  4. Copy API Key (shown once!)                           │
+│  5. Login with API Key                                   │
+└─────────────────────────────────────────────────────────┘
+```
+
+**That's it!** DevKit is now running. Continue to [Usage](#usage) to create more applications and configurations.
 
 ---
 
@@ -291,9 +316,11 @@ See [Deployment Guide](documentos/07-DEPLOYMENT.md) for:
 
 ### Creating Your First Application
 
+> **Note:** Your first application is automatically created during the [Initial Setup](#5-initial-setup-first-time-only). The steps below are for creating additional applications.
+
 #### 1. Via Web UI
 
-1. Navigate to http://localhost:3000
+1. Navigate to http://localhost:3000 and log in with your API Key
 2. Click "New Application"
 3. Fill in application details:
    - **Name:** My E-commerce App
@@ -404,7 +431,7 @@ const dbPassword = await client.getSecret('my-app', 'prod', 'database.password')
 dependencies:
   devkit_sdk:
     git:
-      url: https://github.com/your-org/usedevkit.com.git
+      url: https://github.com/edsonmartins/usedevkit.git
       path: sdks/flutter
 ```
 
@@ -487,6 +514,47 @@ int timeout = client.getConfig("prod", "request.timeout", Integer.class, 5000);
 ---
 
 ## 🔌 API Reference
+
+### Bootstrap (Initial Setup)
+
+These endpoints are public and used for first-time system setup.
+
+**Check Bootstrap Status:**
+
+```http
+GET /api/v1/bootstrap/status
+
+Response:
+{
+  "needsSetup": true,
+  "message": "System needs initial setup"
+}
+```
+
+**Run Initial Bootstrap:**
+
+```http
+POST /api/v1/bootstrap
+Content-Type: application/json
+
+{
+  "organizationName": "My Company",
+  "adminEmail": "admin@company.com",
+  "applicationName": "My Application"
+}
+
+Response:
+{
+  "tenantId": "1",
+  "tenantName": "My Company",
+  "applicationId": "ABC123",
+  "applicationName": "My Application",
+  "apiKey": "dk_xxxx_xxxxxxxxxxxxxxxxx",
+  "message": "Bootstrap completed successfully. Save your API key - it will only be shown once!"
+}
+```
+
+> ⚠️ **Important:** The bootstrap endpoint only works once. After initial setup, it will return an error.
 
 ### Authentication
 
@@ -732,6 +800,7 @@ Comprehensive documentation is available in the [`documentos/`](documentos/) dir
 - ✅ Java SDK MVP
 - ✅ Docker Compose setup
 - ✅ Basic audit logging
+- ✅ **Bootstrap wizard for initial setup** (self-service onboarding)
 
 ### 🚧 Phase 1: Core Features (Current - 8 weeks)
 - ⬜ Feature Flags MVP (toggle, percentage rollout)
@@ -778,8 +847,8 @@ We welcome contributions from the community! Please follow these steps:
 ### 1. Fork and Clone
 
 ```bash
-git clone https://github.com/your-username/usedevkit.com.git
-cd usedevkit.com
+git clone https://github.com/your-username/usedevkit.git
+cd usedevkit
 ```
 
 ### 2. Setup Development Environment
@@ -933,6 +1002,30 @@ flutter test
 
 ### Common Issues
 
+**Issue: Lost or forgot API Key after initial setup**
+
+**Solution:** You'll need to reset the database to run the setup wizard again:
+```bash
+# Using Docker
+docker-compose exec postgres psql -U postgres -d devkit -c "DELETE FROM tenants;"
+
+# Or manually connect to PostgreSQL and run:
+DELETE FROM api_keys;
+DELETE FROM applications;
+DELETE FROM tenant_users;
+DELETE FROM tenants;
+```
+Then access http://localhost:3000 - it will redirect to `/setup` again.
+
+**Issue: Setup wizard not appearing (stuck on login page)**
+
+**Solution:** Check if the backend is running and the bootstrap endpoint is accessible:
+```bash
+curl http://localhost:8080/api/v1/bootstrap/status
+# Should return: {"needsSetup":true,"message":"System needs initial setup"}
+```
+If it returns `needsSetup: false`, the system is already configured. You need to log in with an existing API Key or reset the database.
+
 **Issue: Backend fails to start with "Connection refused"**
 
 **Solution:** Ensure PostgreSQL is running:
@@ -997,7 +1090,7 @@ client.invalidateCache('config:prod:stripe.api.key');
 client.clearCache();
 ```
 
-For more troubleshooting, see [Issues](https://github.com/your-org/usedevkit.com/issues) on GitHub.
+For more troubleshooting, see [Issues](https://github.com/edsonmartins/usedevkit/issues) on GitHub.
 
 ---
 
@@ -1086,8 +1179,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 - 📖 [Documentation](documentos/)
 - 💬 [Discord Community](https://discord.gg/usedevkit)
-- 🐛 [Bug Reports](https://github.com/your-org/usedevkit.com/issues)
-- 💡 [Feature Requests](https://github.com/your-org/usedevkit.com/discussions)
+- 🐛 [Bug Reports](https://github.com/edsonmartins/usedevkit/issues)
+- 💡 [Feature Requests](https://github.com/edsonmartins/usedevkit/discussions)
 - 📧 [Email Support](mailto:support@usedevkit.com)
 
 ### Community
@@ -1154,7 +1247,7 @@ Special thanks to our contributors and the open-source community!
 
   **Built with ❤️ by the DevKit team**
 
-  **[⭐ Star us on GitHub](https://github.com/your-org/usedevkit.com)** •
+  **[⭐ Star us on GitHub](https://github.com/edsonmartins/usedevkit)** •
   **[🐦 Follow us on Twitter](https://twitter.com/usedevkit)** •
   **[💬 Join our Discord](https://discord.gg/usedevkit)**
 
