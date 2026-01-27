@@ -352,10 +352,14 @@ export function CloneRoleDialog({
   const [name, setName] = useState("");
 
   useEffect(() => {
-    if (open) {
+    if (open && role) {
       setName(`${role.name} (Copy)`);
     }
   }, [open, role]);
+
+  if (!role) {
+    return null;
+  }
 
   const handleSubmit = () => {
     if (name.trim()) {

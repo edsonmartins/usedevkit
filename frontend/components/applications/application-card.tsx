@@ -112,17 +112,19 @@ export function ApplicationCard({
           </p>
         )}
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {application.environments.map((env) => (
-            <Badge
-              key={env.id}
-              variant="outline"
-              className="font-mono text-xs border-terminal-border/50"
-            >
-              {env.name}
-            </Badge>
-          ))}
-        </div>
+        {application.environments && application.environments.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {application.environments.map((env) => (
+              <Badge
+                key={env.id}
+                variant="outline"
+                className="font-mono text-xs border-terminal-border/50"
+              >
+                {env.name}
+              </Badge>
+            ))}
+          </div>
+        )}
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm">

@@ -326,12 +326,17 @@ export function TenantUpgradeDialog({
   tenant,
   isSubmitting,
 }: UpgradeDialogProps) {
-  const [selectedPlan, setSelectedPlan] = useState<TenantPlan>(tenant.plan);
-  const [billingEmail, setBillingEmail] = useState(tenant.billingEmail || "");
+  const [selectedPlan, setSelectedPlan] = useState<TenantPlan>(tenant?.plan || "FREE");
+  const [billingEmail, setBillingEmail] = useState(tenant?.billingEmail || "");
+
+  // Don't render if tenant is not provided
+  if (!tenant) {
+    return null;
+  }
 
   useEffect(() => {
-    if (open) {
-      setSelectedPlan(tenant.plan);
+    if (open && tenant) {
+      setSelectedPlan(tenant.plan || "FREE");
       setBillingEmail(tenant.billingEmail || "");
     }
   }, [open, tenant]);

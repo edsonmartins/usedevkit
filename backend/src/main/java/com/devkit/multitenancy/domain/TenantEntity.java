@@ -36,6 +36,7 @@ public class TenantEntity extends BaseEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "plan", length = 50)
     private TenantPlan plan = TenantPlan.FREE;
 

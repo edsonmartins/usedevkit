@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +24,9 @@ export default function LoginPage() {
   const router = useRouter();
   const { login, isLoading } = useAuthStore();
   const [showTerminal, setShowTerminal] = useState(false);
+  const [checkingSetup, setCheckingSetup] = useState(true);
 
+  // All hooks must be called before any conditional returns
   const {
     register,
     handleSubmit,
@@ -32,6 +34,28 @@ export default function LoginPage() {
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
+
+  // Check if system needs initial setup
+  useEffect(() => {
+    const checkBootstrapStatus = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "") || "http://localhost:8080";
+        const response = await fetch(`${apiUrl}/api/v1/bootstrap/status`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.needsSetup) {
+            router.replace("/setup");
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to check bootstrap status:", error);
+      }
+      setCheckingSetup(false);
+    };
+
+    checkBootstrapStatus();
+  }, [router]);
 
   const onSubmit = async (data: LoginForm) => {
     try {
@@ -42,6 +66,17 @@ export default function LoginPage() {
       toast.error(error instanceof Error ? error.message : "Authentication failed");
     }
   };
+
+  // Show loading while checking setup status
+  if (checkingSetup) {
+    return (
+      <div className="flex items-center justify-center">
+        <div className="text-terminal-dim font-mono">
+          <span className="text-terminal-green">$</span> Checking system status...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

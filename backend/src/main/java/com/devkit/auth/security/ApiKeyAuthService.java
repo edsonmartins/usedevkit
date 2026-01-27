@@ -1,6 +1,7 @@
 package com.devkit.auth.security;
 
 import com.devkit.applications.domain.ApplicationApiKeyEntity;
+import com.devkit.applications.domain.ApplicationApiKeyRepository;
 import com.devkit.applications.domain.ApplicationRepository;
 import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.shared.security.EncryptionService;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
@@ -21,14 +23,17 @@ public class ApiKeyAuthService {
     private static final Logger log = LoggerFactory.getLogger(ApiKeyAuthService.class);
 
     private final ApplicationRepository applicationRepository;
+    private final ApplicationApiKeyRepository apiKeyRepository;
     private final EncryptionService encryptionService;
     private final JwtService jwtService;
 
     public ApiKeyAuthService(
             ApplicationRepository applicationRepository,
+            ApplicationApiKeyRepository apiKeyRepository,
             EncryptionService encryptionService,
             JwtService jwtService) {
         this.applicationRepository = applicationRepository;
+        this.apiKeyRepository = apiKeyRepository;
         this.encryptionService = encryptionService;
         this.jwtService = jwtService;
     }
@@ -40,6 +45,7 @@ public class ApiKeyAuthService {
      * @return AuthenticationResponse containing access and refresh tokens
      * @throws AuthenticationException if authentication fails
      */
+    @Transactional
     public AuthenticationResponse authenticate(String apiKey) {
         // Extract prefix from API key
         String prefix = extractPrefix(apiKey);
@@ -47,12 +53,9 @@ public class ApiKeyAuthService {
         // Hash the API key to compare with stored hash
         String apiKeyHash = encryptionService.hashApiKey(apiKey);
 
-        // Find the API key entity
-        ApplicationApiKeyEntity apiKeyEntity = applicationRepository.findAll().stream()
-                .flatMap(app -> app.getApiKeys().stream())
-                .filter(key -> key.getKeyHash().equals(apiKeyHash))
-                .filter(key -> key.getKeyPrefix().equals(prefix))
-                .findFirst()
+        // Find the API key entity using direct repository query
+        ApplicationApiKeyEntity apiKeyEntity = apiKeyRepository
+                .findByKeyHashAndKeyPrefix(apiKeyHash, prefix)
                 .orElseThrow(() -> new AuthenticationException("Invalid API key"));
 
         // Check if API key is active
@@ -163,6 +166,7 @@ public class ApiKeyAuthService {
      * @param name the name of the API key
      * @return the generated API key
      */
+    @Transactional
     public String generateApiKey(String applicationId, String name) {
         var application = applicationRepository.findById(
                         com.devkit.applications.domain.vo.ApplicationId.of(applicationId))
@@ -182,8 +186,7 @@ public class ApiKeyAuthService {
                 application
         );
 
-        application.addApiKey(apiKeyEntity);
-        applicationRepository.save(application);
+        apiKeyRepository.save(apiKeyEntity);
 
         log.info("Generated new API key {} for application {}", name, applicationId);
 

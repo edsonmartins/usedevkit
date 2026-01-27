@@ -74,14 +74,17 @@ export function TenantCard({
   const statusConfig = STATUS_CONFIG[tenant.status];
   const planConfig = PLAN_CONFIG[tenant.plan];
 
-  // Calculate usage percentages
+  // Calculate usage percentages with safe defaults
+  const usage = tenant.usage || { applications: 0, configurations: 0, secrets: 0, users: 0, webhooks: 0, featureFlags: 0 };
+  const limits = tenant.limits || { maxApplications: 1, maxConfigurations: 1, maxSecrets: 1, maxUsers: 1, maxWebhooks: 1, maxFeatureFlags: 1 };
+
   const usagePercentages = {
-    applications: (tenant.usage.applications / tenant.limits.maxApplications) * 100,
-    configurations: (tenant.usage.configurations / tenant.limits.maxConfigurations) * 100,
-    secrets: (tenant.usage.secrets / tenant.limits.maxSecrets) * 100,
-    users: (tenant.usage.users / tenant.limits.maxUsers) * 100,
-    webhooks: (tenant.usage.webhooks / tenant.limits.maxWebhooks) * 100,
-    featureFlags: (tenant.usage.featureFlags / tenant.limits.maxFeatureFlags) * 100,
+    applications: limits.maxApplications > 0 ? (usage.applications / limits.maxApplications) * 100 : 0,
+    configurations: limits.maxConfigurations > 0 ? (usage.configurations / limits.maxConfigurations) * 100 : 0,
+    secrets: limits.maxSecrets > 0 ? (usage.secrets / limits.maxSecrets) * 100 : 0,
+    users: limits.maxUsers > 0 ? (usage.users / limits.maxUsers) * 100 : 0,
+    webhooks: limits.maxWebhooks > 0 ? (usage.webhooks / limits.maxWebhooks) * 100 : 0,
+    featureFlags: limits.maxFeatureFlags > 0 ? (usage.featureFlags / limits.maxFeatureFlags) * 100 : 0,
   };
 
   const isUnlimited = (value: number) => value === -1;
@@ -227,19 +230,19 @@ export function TenantCard({
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="p-2 bg-terminal-bg rounded">
             <div className="text-lg font-mono font-bold text-terminal-text">
-              {tenant.usage.applications}
+              {usage.applications}
             </div>
             <div className="text-[10px] text-terminal-dim">Apps</div>
           </div>
           <div className="p-2 bg-terminal-bg rounded">
             <div className="text-lg font-mono font-bold text-terminal-text">
-              {tenant.usage.users}
+              {usage.users}
             </div>
             <div className="text-[10px] text-terminal-dim">Users</div>
           </div>
           <div className="p-2 bg-terminal-bg rounded">
             <div className="text-lg font-mono font-bold text-terminal-text">
-              {tenant.usage.configurations}
+              {usage.configurations}
             </div>
             <div className="text-[10px] text-terminal-dim">Configs</div>
           </div>
@@ -251,12 +254,12 @@ export function TenantCard({
             <div className="text-xs text-terminal-dim font-mono">Resource Usage</div>
 
             {[
-              { key: "applications", label: "Applications", used: tenant.usage.applications, limit: tenant.limits.maxApplications },
-              { key: "configurations", label: "Configurations", used: tenant.usage.configurations, limit: tenant.limits.maxConfigurations },
-              { key: "secrets", label: "Secrets", used: tenant.usage.secrets, limit: tenant.limits.maxSecrets },
-              { key: "users", label: "Users", used: tenant.usage.users, limit: tenant.limits.maxUsers },
-              { key: "webhooks", label: "Webhooks", used: tenant.usage.webhooks, limit: tenant.limits.maxWebhooks },
-              { key: "featureFlags", label: "Feature Flags", used: tenant.usage.featureFlags, limit: tenant.limits.maxFeatureFlags },
+              { key: "applications", label: "Applications", used: usage.applications, limit: limits.maxApplications },
+              { key: "configurations", label: "Configurations", used: usage.configurations, limit: limits.maxConfigurations },
+              { key: "secrets", label: "Secrets", used: usage.secrets, limit: limits.maxSecrets },
+              { key: "users", label: "Users", used: usage.users, limit: limits.maxUsers },
+              { key: "webhooks", label: "Webhooks", used: usage.webhooks, limit: limits.maxWebhooks },
+              { key: "featureFlags", label: "Feature Flags", used: usage.featureFlags, limit: limits.maxFeatureFlags },
             ].map((item) => {
               const percentage = isUnlimited(item.limit) ? 0 : usagePercentages[item.key as keyof typeof usagePercentages];
               const isNearLimit = !isUnlimited(item.limit) && percentage >= 80;

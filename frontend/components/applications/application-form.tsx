@@ -49,7 +49,7 @@ export function ApplicationForm({
 }: ApplicationFormProps) {
   const [envInput, setEnvInput] = useState("");
   const [environments, setEnvironments] = useState<string[]>(
-    application?.environments.map((e) => e.name) || DEFAULT_ENVIRONMENTS
+    application?.environments?.map((e) => e.name) || DEFAULT_ENVIRONMENTS
   );
 
   const {
