@@ -1,6 +1,10 @@
 package com.devkit.applications.rest;
 
 import com.devkit.applications.domain.*;
+import com.devkit.configurations.domain.ConfigurationRepository;
+import com.devkit.environments.domain.EnvironmentRepository;
+import com.devkit.featureFlags.domain.FeatureFlagQueryService;
+import com.devkit.secrets.domain.SecretRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,12 +27,24 @@ public class ApplicationController {
 
     private final ApplicationCommandService commandService;
     private final ApplicationQueryService queryService;
+    private final EnvironmentRepository environmentRepository;
+    private final ConfigurationRepository configurationRepository;
+    private final SecretRepository secretRepository;
+    private final FeatureFlagQueryService featureFlagQueryService;
 
     ApplicationController(
             ApplicationCommandService commandService,
-            ApplicationQueryService queryService) {
+            ApplicationQueryService queryService,
+            EnvironmentRepository environmentRepository,
+            ConfigurationRepository configurationRepository,
+            SecretRepository secretRepository,
+            FeatureFlagQueryService featureFlagQueryService) {
         this.commandService = commandService;
         this.queryService = queryService;
+        this.environmentRepository = environmentRepository;
+        this.configurationRepository = configurationRepository;
+        this.secretRepository = secretRepository;
+        this.featureFlagQueryService = featureFlagQueryService;
     }
 
     @PostMapping
@@ -153,5 +169,54 @@ public class ApplicationController {
     ResponseEntity<Void> deleteApplication(@PathVariable String id) {
         commandService.deleteApplication(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/stats")
+    @Operation(summary = "Get application statistics", description = "Returns aggregate statistics for an application")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Statistics retrieved successfully"),
+        @ApiResponse(responseCode = "404", description = "Application not found")
+    })
+    ResponseEntity<ApplicationStatsResponse> getApplicationStats(@PathVariable String id) {
+        // Ensure application exists
+        queryService.getApplicationById(id);
+
+        var environments = environmentRepository.findByApplicationId(id);
+
+        List<ApplicationStatsResponse.EnvironmentStats> envStats = environments.stream()
+            .map(env -> {
+                long configCount = configurationRepository.countByEnvironmentId(env.getId().id());
+                long secretCount = secretRepository.countByEnvironmentIdAndIsActiveTrue(env.getId().id());
+                return new ApplicationStatsResponse.EnvironmentStats(
+                    env.getName(),
+                    configCount,
+                    secretCount
+                );
+            })
+            .toList();
+
+        long totalConfigurations = envStats.stream().mapToLong(ApplicationStatsResponse.EnvironmentStats::configurations).sum();
+        long totalSecrets = envStats.stream().mapToLong(ApplicationStatsResponse.EnvironmentStats::secrets).sum();
+        long totalFeatureFlags = featureFlagQueryService.countActiveFeatureFlags(id);
+
+        return ResponseEntity.ok(new ApplicationStatsResponse(
+            totalConfigurations,
+            totalSecrets,
+            totalFeatureFlags,
+            envStats
+        ));
+    }
+
+    public record ApplicationStatsResponse(
+        long totalConfigurations,
+        long totalSecrets,
+        long totalFeatureFlags,
+        List<EnvironmentStats> environments
+    ) {
+        public record EnvironmentStats(
+            String name,
+            long configurations,
+            long secrets
+        ) {}
     }
 }

@@ -82,4 +82,11 @@ public class FeatureFlagQueryService {
                 .map(featureFlagMapper::toFeatureFlagResult)
                 .toList();
     }
+
+    /**
+     * Count active feature flags for an application.
+     */
+    public long countActiveFeatureFlags(String applicationId) {
+        return featureFlagRepository.countByApplicationIdAndIsActiveTrue(applicationId);
+    }
 }

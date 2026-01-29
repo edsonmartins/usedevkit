@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.devkit.sdk"},{"l":"com.devkit.sdk.crypto"},{"l":"com.devkit.sdk.exception"},{"l":"com.devkit.sdk.http"},{"l":"com.devkit.sdk.model"}];updateSearchResults();

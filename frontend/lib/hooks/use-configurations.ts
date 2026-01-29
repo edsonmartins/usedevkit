@@ -10,7 +10,7 @@ import type {
 } from "@/lib/types/configuration";
 import { toast } from "sonner";
 
-export function useConfigurations(environmentId: string) {
+export function useConfigurations(environmentId: string, applicationId?: string) {
   const queryClient = useQueryClient();
 
   const { data: configurations, isLoading, error } = useQuery({
@@ -69,7 +69,7 @@ export function useConfigurations(environmentId: string) {
       type: string;
       sensitive?: boolean;
       description?: string;
-    }>) => configurationsApi.bulkUpsert("", environmentId, configs),
+    }>) => configurationsApi.bulkUpsert(applicationId || "", environmentId, configs),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["configurations", environmentId] });
       queryClient.invalidateQueries({ queryKey: ["configurations", "map", environmentId] });

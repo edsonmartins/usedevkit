@@ -13,11 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSecrets, useSecretStats } from "@/lib/hooks/use-secrets";
+import { useAllSecrets, useSecrets, useSecretStats } from "@/lib/hooks/use-secrets";
 import { useApplications } from "@/lib/hooks/use-applications";
 import { SecretCard } from "@/components/secrets/secret-card";
 import { SecretForm } from "@/components/secrets/secret-form";
 import type { SecretMetadata, SecretStatus, SecretType } from "@/lib/types/secret";
+import { toast } from "sonner";
 
 export default function SecretsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,14 +33,13 @@ export default function SecretsPage() {
 
   // Get secrets for selected application or all
   const appSecrets = useSecrets(selectedApplication === "all" ? "" : selectedApplication);
+  const allSecrets = useAllSecrets();
 
-  // For demo purposes, combine all secrets when "all" is selected
-  const allSecrets = selectedApplication === "all"
-    ? ([] as SecretMetadata[]) // In real app, fetch all secrets
-    : appSecrets.secrets;
+  const activeSecrets = selectedApplication === "all" ? allSecrets : appSecrets;
+  const secretsList = activeSecrets.secrets;
 
   // Filter secrets
-  const filteredSecrets = allSecrets.filter((secret) => {
+  const filteredSecrets = secretsList.filter((secret) => {
     const matchesSearch = secret.key.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "ALL" || secret.status === statusFilter;
     const matchesType = typeFilter === "ALL" || secret.type === typeFilter;
@@ -49,7 +49,7 @@ export default function SecretsPage() {
   const handleCreate = () => {
     setSelectedSecret(undefined);
     if (selectedApplication === "all") {
-      // Show error to select an application first
+      toast.error("Select an application before creating a secret");
       return;
     }
     setShowCreateDialog(true);
@@ -243,13 +243,18 @@ export default function SecretsPage() {
               key={secret.id}
               secret={secret}
               onReveal={() => handleReveal(secret)}
-              onRotate={() => appSecrets.rotate({ id: secret.id })}
+              onRotate={() => {
+                const newValue = window.prompt("Enter new secret value");
+                if (newValue) {
+                  activeSecrets.rotate({ id: secret.id, newValue });
+                }
+              }}
               onEdit={() => handleEdit(secret)}
-              onDeactivate={() => appSecrets.deactivate(secret.id)}
-              onDelete={() => appSecrets.delete(secret.id)}
-              isRotating={appSecrets.isRotating}
-              isDeactivating={appSecrets.isDeactivating}
-              isDeleting={appSecrets.isDeleting}
+              onDeactivate={() => activeSecrets.deactivate(secret.id)}
+              onDelete={() => activeSecrets.delete(secret.id)}
+              isRotating={activeSecrets.isRotating}
+              isDeactivating={activeSecrets.isDeactivating}
+              isDeleting={activeSecrets.isDeleting}
             />
           ))}
         </div>
@@ -264,14 +269,14 @@ export default function SecretsPage() {
         }}
         onSubmit={(data) => {
           if (selectedSecret) {
-            appSecrets.update({ id: selectedSecret.id, data });
+            activeSecrets.update({ id: selectedSecret.id, data });
           } else {
             appSecrets.create(data as Parameters<typeof appSecrets.create>[0]);
           }
         }}
         secret={selectedSecret}
         applicationId={selectedApplication === "all" ? "" : selectedApplication}
-        isSubmitting={appSecrets.isCreating || appSecrets.isUpdating}
+        isSubmitting={activeSecrets.isUpdating || appSecrets.isCreating}
       />
     </div>
   );

@@ -99,6 +99,19 @@ public class PromotionController {
     }
 
     /**
+     * List promotion requests for a specific application.
+     */
+    @GetMapping("/application/{applicationId}")
+    public ResponseEntity<List<PromotionRequestDTO>> listPromotionRequestsByApplication(
+            @PathVariable String applicationId) {
+        List<PromotionRequestEntity> entities = promotionService.findByApplicationId(applicationId);
+        List<PromotionRequestDTO> dtos = entities.stream()
+            .map(PromotionRequestDTO::fromEntityWithoutDiffs)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
      * Get recent promotion requests.
      */
     @GetMapping("/recent")
@@ -152,6 +165,16 @@ public class PromotionController {
         return ResponseEntity.ok(PromotionRequestDTO.fromEntityWithoutDiffs(entity));
     }
 
+    /**
+     * Cancel a promotion request (alias to reject).
+     */
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<PromotionRequestDTO> cancelPromotion(@PathVariable String id) {
+        promotionService.rejectPromotion(id, "system", "Cancelled");
+        PromotionRequestEntity entity = promotionService.getPromotionRequestEntity(id);
+        return ResponseEntity.ok(PromotionRequestDTO.fromEntityWithoutDiffs(entity));
+    }
+
     // ==================== Execution ====================
 
     /**
@@ -185,6 +208,15 @@ public class PromotionController {
         return ResponseEntity.ok(PromotionRequestDTO.fromEntityWithoutDiffs(entity));
     }
 
+    /**
+     * Delete a promotion request.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePromotion(@PathVariable String id) {
+        promotionService.deletePromotion(id);
+        return ResponseEntity.noContent().build();
+    }
+
     // ==================== Diff Operations ====================
 
     /**
@@ -213,6 +245,20 @@ public class PromotionController {
             .map(PromotionDiffDTO::fromEntity)
             .toList();
 
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
+     * Get diffs between two environments.
+     */
+    @GetMapping("/diff")
+    public ResponseEntity<List<EnvironmentDiffDTO>> getEnvironmentDiff(
+            @RequestParam String source,
+            @RequestParam String target) {
+        var diffs = promotionService.calculateDiffsForEnvironments(source, target);
+        var dtos = diffs.stream()
+            .map(EnvironmentDiffDTO::fromDomain)
+            .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -278,4 +324,24 @@ public class PromotionController {
         long failedCount,
         long rejectedCount
     ) {}
+
+    public record EnvironmentDiffDTO(
+        String key,
+        String sourceValue,
+        String targetValue,
+        String sourceType,
+        String targetType,
+        PromotionDiffEntity.ChangeType changeType
+    ) {
+        public static EnvironmentDiffDTO fromDomain(EnvironmentPromotionService.EnvironmentDiff diff) {
+            return new EnvironmentDiffDTO(
+                diff.key(),
+                diff.sourceValue(),
+                diff.targetValue(),
+                diff.sourceType(),
+                diff.targetType(),
+                diff.changeType()
+            );
+        }
+    }
 }

@@ -1,6 +1,9 @@
 package com.devkit.secrets.domain;
 
+import com.devkit.applications.domain.ApplicationEncryptionKeyRepository;
 import com.devkit.secrets.domain.events.SecretRotatedEvent;
+import com.devkit.secrets.domain.events.SecretRotationFailedEvent;
+import com.devkit.secrets.integrations.SecretExternalManager;
 import com.devkit.secrets.domain.vo.SecretId;
 import com.devkit.shared.domain.SpringEventPublisher;
 import com.devkit.shared.security.EncryptionService;
@@ -26,16 +29,22 @@ public class SecretRotationScheduler {
     private final SecretRotationRepository rotationRepository;
     private final EncryptionService encryptionService;
     private final SpringEventPublisher eventPublisher;
+    private final ApplicationEncryptionKeyRepository encryptionKeyRepository;
+    private final SecretExternalManager externalManager;
 
     SecretRotationScheduler(
             SecretRepository secretRepository,
             SecretRotationRepository rotationRepository,
             EncryptionService encryptionService,
-            SpringEventPublisher eventPublisher) {
+            SpringEventPublisher eventPublisher,
+            ApplicationEncryptionKeyRepository encryptionKeyRepository,
+            SecretExternalManager externalManager) {
         this.secretRepository = secretRepository;
         this.rotationRepository = rotationRepository;
         this.encryptionService = encryptionService;
         this.eventPublisher = eventPublisher;
+        this.encryptionKeyRepository = encryptionKeyRepository;
+        this.externalManager = externalManager;
     }
 
     /**
@@ -134,9 +143,9 @@ public class SecretRotationScheduler {
         Integer previousVersion = secret.getVersionNumber();
 
         // For automatic rotation, we generate a new value
-        // In production, this would integrate with external secret managers (AWS, Azure, etc.)
         String newValue = generateNewSecretValue(secret);
-        String newEncryptedValue = encryptionService.encrypt(newValue);
+        externalManager.upsertSecret(secret, newValue, secret.getDescription());
+        String newEncryptedValue = encryptSecretValue(secret.getApplicationId(), newValue);
 
         // Rotate the secret
         secret.rotate(newEncryptedValue, rotatedBy);
@@ -185,6 +194,28 @@ public class SecretRotationScheduler {
             errorMessage
         );
         rotationRepository.save(failureHistory);
+        eventPublisher.publish(new SecretRotationFailedEvent(
+            secret.getId().id(),
+            secret.getKey(),
+            "SYSTEM_SCHEDULER",
+            secret.getVersionNumber(),
+            secret.getApplicationId(),
+            secret.getEnvironmentId(),
+            errorMessage
+        ));
+    }
+
+    private String encryptSecretValue(String applicationId, String plaintextValue) {
+        var encryptionKey = encryptionKeyRepository.findLatestActiveByApplicationId(applicationId)
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Application encryption key not found. Please create an encryption key for this application first."));
+
+        String applicationKey = encryptionService.unwrapApplicationKey(encryptionKey.getEncryptedKey());
+        return encryptionService.encryptForApp(
+            plaintextValue,
+            applicationKey,
+            encryptionKey.getSalt()
+        );
     }
 
     /**

@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Jan 28 18:29:46 GMT-03:00 2026
+eec40a38fe124a89432355b28b14b32e6345f64c@default-central-https\://repo.maven.apache.org/maven2/.lastUpdated=1769635786140
+https\://repo.maven.apache.org/maven2/.error=Could not transfer artifact org.springframework.boot\:spring-boot-starter-parent\:pom\:3.2.2 from/to central (https\://repo.maven.apache.org/maven2)\: repo.maven.apache.org\: nodename nor servname provided, or not known

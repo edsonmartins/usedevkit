@@ -164,4 +164,18 @@ public class FeatureFlagCommandService {
                 featureFlag.getKey()
         ));
     }
+
+    /**
+     * Archive a feature flag (soft delete).
+     * @param featureFlagId the ID of the feature flag to archive
+     */
+    public void archiveFeatureFlag(String featureFlagId) {
+        var featureFlag = featureFlagRepository.findById(
+                        com.devkit.featureFlags.domain.vo.FeatureFlagId.of(featureFlagId))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Feature flag not found with id: " + featureFlagId));
+
+        featureFlag.archive();
+        featureFlagRepository.save(featureFlag);
+    }
 }

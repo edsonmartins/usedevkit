@@ -23,8 +23,7 @@ export function useSecrets(applicationId: string) {
   const createMutation = useMutation({
     mutationFn: (data: CreateSecretDto) => secretsApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["secrets", applicationId] });
-      queryClient.invalidateQueries({ queryKey: ["secrets", "stats"] });
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
       toast.success("Secret created successfully");
     },
     onError: (error: Error) => {
@@ -36,7 +35,7 @@ export function useSecrets(applicationId: string) {
     mutationFn: ({ id, data }: { id: string; data: UpdateSecretDto }) =>
       secretsApi.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["secrets", applicationId] });
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
       toast.success("Secret updated successfully");
     },
     onError: (error: Error) => {
@@ -47,8 +46,7 @@ export function useSecrets(applicationId: string) {
   const deleteMutation = useMutation({
     mutationFn: (id: string) => secretsApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["secrets", applicationId] });
-      queryClient.invalidateQueries({ queryKey: ["secrets", "stats"] });
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
       toast.success("Secret deleted successfully");
     },
     onError: (error: Error) => {
@@ -57,11 +55,10 @@ export function useSecrets(applicationId: string) {
   });
 
   const rotateMutation = useMutation({
-    mutationFn: ({ id, reason }: { id: string; reason?: string }) =>
-      secretsApi.rotate(id, reason),
+    mutationFn: ({ id, newValue }: { id: string; newValue: string }) =>
+      secretsApi.rotate(id, newValue),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["secrets", applicationId] });
-      queryClient.invalidateQueries({ queryKey: ["secrets", "stats"] });
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
       toast.success("Secret rotated successfully");
     },
     onError: (error: Error) => {
@@ -72,8 +69,7 @@ export function useSecrets(applicationId: string) {
   const deactivateMutation = useMutation({
     mutationFn: (id: string) => secretsApi.deactivate(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["secrets", applicationId] });
-      queryClient.invalidateQueries({ queryKey: ["secrets", "stats"] });
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
       toast.success("Secret deactivated");
     },
     onError: (error: Error) => {
@@ -87,6 +83,75 @@ export function useSecrets(applicationId: string) {
     error,
     create: createMutation.mutate,
     isCreating: createMutation.isPending,
+    update: updateMutation.mutate,
+    isUpdating: updateMutation.isPending,
+    delete: deleteMutation.mutate,
+    isDeleting: deleteMutation.isPending,
+    rotate: rotateMutation.mutate,
+    isRotating: rotateMutation.isPending,
+    deactivate: deactivateMutation.mutate,
+    isDeactivating: deactivateMutation.isPending,
+  };
+}
+
+export function useAllSecrets() {
+  const queryClient = useQueryClient();
+
+  const { data: secrets = [], isLoading, error } = useQuery({
+    queryKey: ["secrets", "all"],
+    queryFn: secretsApi.getAll,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateSecretDto }) =>
+      secretsApi.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
+      toast.success("Secret updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update secret");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => secretsApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
+      toast.success("Secret deleted successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to delete secret");
+    },
+  });
+
+  const rotateMutation = useMutation({
+    mutationFn: ({ id, newValue }: { id: string; newValue: string }) =>
+      secretsApi.rotate(id, newValue),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
+      toast.success("Secret rotated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to rotate secret");
+    },
+  });
+
+  const deactivateMutation = useMutation({
+    mutationFn: (id: string) => secretsApi.deactivate(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["secrets"] });
+      toast.success("Secret deactivated");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to deactivate secret");
+    },
+  });
+
+  return {
+    secrets,
+    isLoading,
+    error,
     update: updateMutation.mutate,
     isUpdating: updateMutation.isPending,
     delete: deleteMutation.mutate,

@@ -12,6 +12,8 @@ public record CreateSecretCmd(
     String description,
     String applicationId,
     String environmentId,
+    SecretEntity.ExternalProvider externalProvider,
+    String externalSecretName,
     RotationPolicy rotationPolicy
 ) {
     public CreateSecretCmd {

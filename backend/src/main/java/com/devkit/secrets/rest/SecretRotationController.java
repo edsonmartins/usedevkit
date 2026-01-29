@@ -61,6 +61,16 @@ public class SecretRotationController {
         return ResponseEntity.ok(responses);
     }
 
+    @GetMapping("/{secretId}/history")
+    @Operation(summary = "Get rotation history (alias)", description = "Alias endpoint for rotation history")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Rotation history retrieved successfully"),
+        @ApiResponse(responseCode = "404", description = "Secret not found")
+    })
+    ResponseEntity<List<SecretRotationResponse>> getRotationHistoryAlias(@PathVariable String secretId) {
+        return getRotationHistory(secretId);
+    }
+
     @GetMapping("/application/{applicationId}/rotations")
     @Operation(summary = "Get rotation history by application", description = "Retrieves all rotations for an application")
     @ApiResponses(value = {

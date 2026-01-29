@@ -2,6 +2,8 @@ export type SecretType = "API_KEY" | "PASSWORD" | "CERTIFICATE" | "TOKEN" | "DAT
 
 export type SecretStatus = "ACTIVE" | "EXPIRED" | "ROTATION_PENDING" | "DEACTIVATED";
 
+export type SecretExternalProvider = "AWS_SECRETS_MANAGER";
+
 export interface Secret {
   id: string;
   key: string;
@@ -11,6 +13,8 @@ export interface Secret {
   description?: string;
   applicationId: string;
   rotationDays?: number;
+  externalProvider?: SecretExternalProvider;
+  externalSecretName?: string;
   lastRotatedAt?: string;
   expiresAt?: string;
   createdAt: string;
@@ -33,12 +37,16 @@ export interface CreateSecretDto {
   description?: string;
   applicationId: string;
   rotationDays?: number;
+  externalProvider?: SecretExternalProvider;
+  externalSecretName?: string;
 }
 
 export interface UpdateSecretDto {
   value?: string;
   description?: string;
   rotationDays?: number;
+  externalProvider?: SecretExternalProvider;
+  externalSecretName?: string;
 }
 
 export interface SecretMetadata {
@@ -48,6 +56,8 @@ export interface SecretMetadata {
   status: SecretStatus;
   description?: string;
   rotationDays?: number;
+  externalProvider?: SecretExternalProvider;
+  externalSecretName?: string;
   lastRotatedAt?: string;
   expiresAt?: string;
   daysUntilExpiration?: number;

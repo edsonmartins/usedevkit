@@ -167,7 +167,7 @@ export default function SetupPage() {
             Welcome to DevKit
           </h1>
           <p className="text-terminal-dim mt-1">
-            Let's set up your instance
+            Let&apos;s set up your instance
           </p>
         </div>
       </div>

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for tenant management.
@@ -108,6 +110,15 @@ public class TenantController {
     }
 
     /**
+     * Suspend tenant (alias to deactivate).
+     */
+    @PostMapping("/{id}/suspend")
+    public ResponseEntity<Void> suspendTenant(@PathVariable Long id) {
+        tenantService.deactivateTenant(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
      * Upgrade tenant plan.
      * POST /api/v1/tenants/{id}/upgrade
      */
@@ -138,4 +149,40 @@ public class TenantController {
         tenantService.deleteTenant(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Get overall tenant statistics.
+     * GET /api/v1/tenants/stats
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<TenantStatsDTO> getTenantStats() {
+        List<TenantDTO> tenants = tenantService.getAllTenants();
+
+        long total = tenants.size();
+        long active = tenants.stream().filter(TenantDTO::isActive).count();
+        long trial = tenants.stream().filter(t -> t.trialEndsAt() != null && t.isActive()).count();
+        long suspended = tenants.stream().filter(t -> !t.isActive()).count();
+        long cancelled = 0;
+
+        Map<String, Long> tenantsByPlan = tenants.stream()
+            .collect(Collectors.groupingBy(TenantDTO::plan, Collectors.counting()));
+
+        return ResponseEntity.ok(new TenantStatsDTO(
+            total,
+            active,
+            trial,
+            suspended,
+            cancelled,
+            tenantsByPlan
+        ));
+    }
+
+    public record TenantStatsDTO(
+        long totalTenants,
+        long activeTenants,
+        long trialTenants,
+        long suspendedTenants,
+        long cancelledTenants,
+        Map<String, Long> tenantsByPlan
+    ) {}
 }

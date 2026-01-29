@@ -48,7 +48,8 @@ export default function ConfigurationsPage() {
     isUpdating,
     delete: deleteConfig,
     isDeleting,
-  } = useConfigurations(selectedEnvironmentId || "");
+    bulkUpsert,
+  } = useConfigurations(selectedEnvironmentId || "", applicationId);
 
   const {
     versions,
@@ -142,7 +143,12 @@ export default function ConfigurationsPage() {
 
       const text = await file.text();
       const lines = text.split("\n");
-      const configs: Configuration[] = [];
+      const configs: Array<{
+        key: string;
+        value: string;
+        type: string;
+        sensitive?: boolean;
+      }> = [];
 
       for (const line of lines) {
         const trimmed = line.trim();
@@ -153,25 +159,18 @@ export default function ConfigurationsPage() {
 
         if (key && value) {
           configs.push({
-            id: "",
             key: key.trim(),
             value,
             type: "STRING",
             sensitive: key.toLowerCase().includes("secret") ||
                      key.toLowerCase().includes("password") ||
                      key.toLowerCase().includes("key"),
-            applicationId,
-            environmentId: selectedEnvironmentId!,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            version: 1,
           });
         }
       }
 
-      if (configs.length > 0) {
-        // TODO: Implement bulk upsert
-        toast.success(`Imported ${configs.length} configurations`);
+      if (configs.length > 0 && selectedEnvironmentId) {
+        bulkUpsert(configs);
       }
     };
     input.click();

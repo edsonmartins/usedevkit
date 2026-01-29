@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { SecretMetadata, CreateSecretDto, SecretType } from "@/lib/types/secret";
+import type { SecretMetadata, CreateSecretDto, UpdateSecretDto, SecretType, SecretExternalProvider } from "@/lib/types/secret";
 
 const secretSchema = z.object({
   key: z.string().min(1, "Key is required").max(255, "Key must be less than 255 characters")
@@ -35,6 +35,8 @@ const secretSchema = z.object({
   type: z.enum(["API_KEY", "PASSWORD", "CERTIFICATE", "TOKEN", "DATABASE_URL", "OTHER"]),
   description: z.string().max(500, "Description must be less than 500 characters").optional(),
   rotationDays: z.number().min(1).max(365).optional(),
+  externalProvider: z.enum(["AWS_SECRETS_MANAGER"]).optional(),
+  externalSecretName: z.string().max(255).optional(),
 });
 
 type SecretForm = z.infer<typeof secretSchema>;
@@ -53,7 +55,7 @@ const ROTATION_PRESETS = [30, 60, 90, 180, 365];
 interface SecretFormProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateSecretDto | { value: string; description?: string; rotationDays?: number }) => void;
+  onSubmit: (data: CreateSecretDto | UpdateSecretDto) => void;
   secret?: SecretMetadata;
   applicationId: string;
   isSubmitting?: boolean;
@@ -85,6 +87,8 @@ export function SecretForm({
       type: secret?.type || "OTHER",
       description: secret?.description || "",
       rotationDays: secret?.rotationDays || 90,
+      externalProvider: secret?.externalProvider,
+      externalSecretName: secret?.externalSecretName || "",
     },
   });
 
@@ -100,6 +104,8 @@ export function SecretForm({
         type: secret?.type || "OTHER",
         description: secret?.description || "",
         rotationDays: secret?.rotationDays || 90,
+        externalProvider: secret?.externalProvider,
+        externalSecretName: secret?.externalSecretName || "",
       });
       setShowPassword(false);
     }
@@ -129,17 +135,23 @@ export function SecretForm({
   const strengthLabels = ["Weak", "Fair", "Good", "Strong", "Excellent"];
 
   const onFormSubmit = (data: SecretForm) => {
+    const payload = {
+      ...data,
+      externalSecretName: data.externalProvider ? data.externalSecretName : undefined,
+    };
     if (secret) {
       // Update mode - only send value and description
       onSubmit({
-        value: data.value,
-        description: data.description,
-        rotationDays: data.rotationDays,
+        value: payload.value,
+        description: payload.description,
+        rotationDays: payload.rotationDays,
+        externalProvider: payload.externalProvider,
+        externalSecretName: payload.externalSecretName,
       });
     } else {
       // Create mode
       onSubmit({
-        ...data,
+        ...payload,
         applicationId,
       } as CreateSecretDto);
     }
@@ -291,6 +303,48 @@ export function SecretForm({
             <p className="text-xs text-terminal-dim">
               Secret will be flagged for rotation every {rotationDays} days
             </p>
+          </div>
+
+          {/* External Manager */}
+          <div className="space-y-2">
+            <Label className="text-terminal-text">External Secret Manager</Label>
+            <Select
+              value={watch("externalProvider") || "NONE"}
+              onValueChange={(value) => {
+                setValue(
+                  "externalProvider",
+                  value === "NONE" ? undefined : (value as SecretExternalProvider),
+                  { shouldDirty: true }
+                );
+                if (value === "NONE") {
+                  setValue("externalSecretName", "", { shouldDirty: true });
+                }
+              }}
+            >
+              <SelectTrigger className="font-mono border-terminal-border bg-terminal-surface">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-terminal-surface border-terminal-border">
+                <SelectItem value="NONE" className="font-mono">None</SelectItem>
+                <SelectItem value="AWS_SECRETS_MANAGER" className="font-mono">AWS Secrets Manager</SelectItem>
+              </SelectContent>
+            </Select>
+            {watch("externalProvider") && (
+              <div className="space-y-2">
+                <Label htmlFor="externalSecretName" className="text-terminal-text">
+                  External Secret Name
+                </Label>
+                <Input
+                  id="externalSecretName"
+                  placeholder="prod/my-app/database-password"
+                  className={cn("font-mono", errors.externalSecretName && "border-terminal-coral")}
+                  {...register("externalSecretName")}
+                />
+                {errors.externalSecretName && (
+                  <p className="text-xs text-terminal-coral">{errors.externalSecretName.message}</p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Description */}

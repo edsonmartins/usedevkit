@@ -1,0 +1,13 @@
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/http/HttpClient.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/exception/DevKitException.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/DevKitClient.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/HotReloadConfigClient.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/ConfigCache.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/model/Secret.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/model/FeatureFlagEvaluation.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/model/FeatureFlag.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/exception/AuthenticationException.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/crypto/CryptoUtil.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/crypto/DecryptionException.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/model/Configuration.java
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java/com/devkit/sdk/DevKitClientBuilder.java

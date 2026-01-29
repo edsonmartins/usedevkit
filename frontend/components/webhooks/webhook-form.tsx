@@ -33,28 +33,22 @@ const ALL_EVENTS: WebhookEvent[] = [
   "CONFIGURATION_CREATED",
   "CONFIGURATION_UPDATED",
   "CONFIGURATION_DELETED",
-  "CONFIGURATION_ROLLEDBACK",
   "SECRET_ROTATED",
+  "SECRET_ROTATION_FAILED",
   "SECRET_EXPIRED",
-  "FEATURE_FLAG_TOGGLED",
   "PROMOTION_COMPLETED",
   "PROMOTION_FAILED",
-  "APPLICATION_CREATED",
-  "APPLICATION_DELETED",
 ];
 
 const EVENT_DESCRIPTIONS: Record<WebhookEvent, string> = {
   CONFIGURATION_CREATED: "When a new configuration is created",
   CONFIGURATION_UPDATED: "When a configuration is updated",
   CONFIGURATION_DELETED: "When a configuration is deleted",
-  CONFIGURATION_ROLLEDBACK: "When a configuration is rolled back",
   SECRET_ROTATED: "When a secret is rotated",
+  SECRET_ROTATION_FAILED: "When a secret rotation fails",
   SECRET_EXPIRED: "When a secret expires",
-  FEATURE_FLAG_TOGGLED: "When a feature flag is toggled",
   PROMOTION_COMPLETED: "When a promotion completes successfully",
   PROMOTION_FAILED: "When a promotion fails",
-  APPLICATION_CREATED: "When a new application is created",
-  APPLICATION_DELETED: "When an application is deleted",
 };
 
 interface WebhookFormProps {

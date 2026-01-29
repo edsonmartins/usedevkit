@@ -157,7 +157,7 @@ export default function LoginPage() {
           {/* Help text */}
           <div className="mt-6 pt-6 border-t border-terminal-border">
             <p className="text-xs text-terminal-dim font-mono">
-              <span className="text-terminal-green">#</span> Don't have an API Key?
+              <span className="text-terminal-green">#</span> Don&apos;t have an API Key?
             </p>
             <p className="text-xs text-terminal-dim font-mono mt-1">
               Contact your administrator or create a new application.

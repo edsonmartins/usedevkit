@@ -119,6 +119,22 @@ public class TenantUserController {
     }
 
     /**
+     * Invite user (alias to add user).
+     */
+    @PostMapping("/invite")
+    public ResponseEntity<TenantUserDTO> inviteTenantUser(
+            @PathVariable Long tenantId,
+            @Valid @RequestBody InviteTenantUserRequest request) {
+        AddTenantUserDTO dto = new AddTenantUserDTO(
+            request.email(),
+            request.email(),
+            request.email(),
+            mapRole(request.role())
+        );
+        return addTenantUser(tenantId, dto);
+    }
+
+    /**
      * Update user role in tenant.
      * PUT /api/v1/tenants/{tenantId}/users/{userId}
      */
@@ -143,6 +159,18 @@ public class TenantUserController {
 
         TenantUserEntity updated = tenantUserRepository.save(user);
         return ResponseEntity.ok(mapToDTO(updated));
+    }
+
+    /**
+     * Update user role (alias).
+     */
+    @PutMapping("/{userId}/role")
+    public ResponseEntity<TenantUserDTO> updateTenantUserRole(
+            @PathVariable Long tenantId,
+            @PathVariable String userId,
+            @Valid @RequestBody UpdateTenantUserRoleRequest request) {
+        UpdateTenantUserDTO dto = new UpdateTenantUserDTO(mapRole(request.role()));
+        return updateTenantUser(tenantId, userId, dto);
     }
 
     /**
@@ -276,6 +304,37 @@ public class TenantUserController {
             case MEMBER -> TenantUserEntity.TenantRole.MEMBER;
             case VIEWER -> TenantUserEntity.TenantRole.VIEWER;
         };
+    }
+
+    private AddTenantUserDTO.TenantRoleDTO mapRole(InviteTenantUserRequest.TenantRole role) {
+        return switch (role) {
+            case OWNER -> AddTenantUserDTO.TenantRoleDTO.OWNER;
+            case ADMIN -> AddTenantUserDTO.TenantRoleDTO.ADMIN;
+            case MEMBER -> AddTenantUserDTO.TenantRoleDTO.MEMBER;
+            case VIEWER -> AddTenantUserDTO.TenantRoleDTO.VIEWER;
+        };
+    }
+
+    private UpdateTenantUserDTO.TenantRoleDTO mapRole(UpdateTenantUserRoleRequest.TenantRole role) {
+        return switch (role) {
+            case OWNER -> UpdateTenantUserDTO.TenantRoleDTO.OWNER;
+            case ADMIN -> UpdateTenantUserDTO.TenantRoleDTO.ADMIN;
+            case MEMBER -> UpdateTenantUserDTO.TenantRoleDTO.MEMBER;
+            case VIEWER -> UpdateTenantUserDTO.TenantRoleDTO.VIEWER;
+        };
+    }
+
+    record InviteTenantUserRequest(
+        String email,
+        TenantRole role
+    ) {
+        enum TenantRole { OWNER, ADMIN, MEMBER, VIEWER }
+    }
+
+    record UpdateTenantUserRoleRequest(
+        TenantRole role
+    ) {
+        enum TenantRole { OWNER, ADMIN, MEMBER, VIEWER }
     }
 
     private TenantUserDTO mapToDTO(TenantUserEntity entity) {

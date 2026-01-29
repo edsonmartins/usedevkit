@@ -37,14 +37,11 @@ const EVENT_COLORS: Record<string, string> = {
   CONFIGURATION_CREATED: "bg-green-500/20 text-green-400",
   CONFIGURATION_UPDATED: "bg-blue-500/20 text-blue-400",
   CONFIGURATION_DELETED: "bg-red-500/20 text-red-400",
-  CONFIGURATION_ROLLEDBACK: "bg-orange-500/20 text-orange-400",
   SECRET_ROTATED: "bg-purple-500/20 text-purple-400",
+  SECRET_ROTATION_FAILED: "bg-red-500/20 text-red-400",
   SECRET_EXPIRED: "bg-yellow-500/20 text-yellow-400",
-  FEATURE_FLAG_TOGGLED: "bg-cyan-500/20 text-cyan-400",
   PROMOTION_COMPLETED: "bg-emerald-500/20 text-emerald-400",
   PROMOTION_FAILED: "bg-pink-500/20 text-pink-400",
-  APPLICATION_CREATED: "bg-teal-500/20 text-teal-400",
-  APPLICATION_DELETED: "bg-rose-500/20 text-rose-400",
 };
 
 interface WebhookCardProps {

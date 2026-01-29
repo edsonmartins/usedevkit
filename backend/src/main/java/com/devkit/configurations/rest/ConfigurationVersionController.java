@@ -136,4 +136,21 @@ public class ConfigurationVersionController {
         var result = queryService.getConfigurationById(configurationId);
         return ResponseEntity.ok(ConfigurationResponse.from(result));
     }
+
+    /**
+     * Rollback configuration using request body (alias for frontend compatibility).
+     */
+    @PostMapping("/{configurationId}/rollback")
+    @Operation(summary = "Rollback to previous version (alias)", description = "Rolls back a configuration using a request body payload")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Configuration rolled back successfully"),
+        @ApiResponse(responseCode = "404", description = "Configuration or version not found")
+    })
+    ResponseEntity<ConfigurationResponse> rollbackToVersionAlias(
+            @PathVariable String configurationId,
+            @RequestBody RollbackRequest request) {
+        return rollbackToVersion(configurationId, request.version());
+    }
+
+    record RollbackRequest(int version, String reason) {}
 }

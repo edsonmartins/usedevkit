@@ -1,7 +1,6 @@
 package com.devkit.rbac.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -15,7 +14,6 @@ public record CreateRoleDTO(
 
     String description,
 
-    @NotNull(message = "Tenant ID is required")
     Long tenantId,
 
     List<Long> permissionIds

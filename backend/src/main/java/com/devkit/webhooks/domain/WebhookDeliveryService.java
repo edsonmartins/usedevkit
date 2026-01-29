@@ -384,6 +384,22 @@ public class WebhookDeliveryService {
         return deliveryRepository.findRecent();
     }
 
+    /**
+     * Retry a failed delivery immediately.
+     */
+    public void retryDelivery(Long deliveryId) {
+        WebhookDeliveryEntity delivery = deliveryRepository.findById(deliveryId)
+            .orElseThrow(() -> new IllegalArgumentException("Delivery not found: " + deliveryId));
+
+        if (delivery.getStatus() != WebhookDeliveryEntity.DeliveryStatus.FAILED) {
+            throw new IllegalStateException("Only failed deliveries can be retried");
+        }
+
+        WebhookDeliveryEntity retryDelivery = WebhookDeliveryEntity.createRetryDelivery(delivery);
+        deliveryRepository.save(retryDelivery);
+        executeDelivery(retryDelivery);
+    }
+
     public WebhookStatsDTO getStatistics() {
         long activeCount = webhookRepository.countByStatus(WebhookEntity.WebhookStatus.ACTIVE);
         long inactiveCount = webhookRepository.countByStatus(WebhookEntity.WebhookStatus.INACTIVE);

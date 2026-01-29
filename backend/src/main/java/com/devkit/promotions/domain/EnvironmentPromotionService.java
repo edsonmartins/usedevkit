@@ -260,6 +260,67 @@ public class EnvironmentPromotionService {
         return new DiffSummary(diffs.size(), newCount, modifiedCount, deletedCount, sameCount);
     }
 
+    /**
+     * Calculate diffs between two environments without creating a promotion request.
+     */
+    public List<EnvironmentDiff> calculateDiffsForEnvironments(String sourceEnvironmentId, String targetEnvironmentId) {
+        Map<String, ConfigurationDiff> sourceConfigs = getConfigurations(null, sourceEnvironmentId);
+        Map<String, ConfigurationDiff> targetConfigs = getConfigurations(null, targetEnvironmentId);
+
+        Set<String> allKeys = new HashSet<>();
+        allKeys.addAll(sourceConfigs.keySet());
+        allKeys.addAll(targetConfigs.keySet());
+
+        List<EnvironmentDiff> diffs = new ArrayList<>();
+
+        for (String key : allKeys) {
+            ConfigurationDiff source = sourceConfigs.get(key);
+            ConfigurationDiff target = targetConfigs.get(key);
+
+            if (source != null && target == null) {
+                diffs.add(new EnvironmentDiff(
+                    key,
+                    source.value,
+                    null,
+                    source.type,
+                    null,
+                    PromotionDiffEntity.ChangeType.NEW
+                ));
+            } else if (source != null) {
+                if (!source.value.equals(target.value) || !source.type.equals(target.type)) {
+                    diffs.add(new EnvironmentDiff(
+                        key,
+                        source.value,
+                        target.value,
+                        source.type,
+                        target.type,
+                        PromotionDiffEntity.ChangeType.MODIFIED
+                    ));
+                } else {
+                    diffs.add(new EnvironmentDiff(
+                        key,
+                        source.value,
+                        target.value,
+                        source.type,
+                        target.type,
+                        PromotionDiffEntity.ChangeType.SAME
+                    ));
+                }
+            } else if (target != null) {
+                diffs.add(new EnvironmentDiff(
+                    key,
+                    null,
+                    target.value,
+                    null,
+                    target.type,
+                    PromotionDiffEntity.ChangeType.DELETED
+                ));
+            }
+        }
+
+        return diffs;
+    }
+
     // ==================== Helper Methods ====================
 
     private PromotionRequestEntity getPromotionRequest(String promotionRequestId) {
@@ -381,6 +442,12 @@ public class EnvironmentPromotionService {
         return promotionRepository.findByStatus(status);
     }
 
+    public void deletePromotion(String promotionRequestId) {
+        PromotionRequestEntity request = getPromotionRequest(promotionRequestId);
+        promotionRepository.delete(request);
+        logger.info("Deleted promotion request: {}", promotionRequestId);
+    }
+
     public List<PromotionRequestEntity> findAllPromotionRequests() {
         return promotionRepository.findAll();
     }
@@ -416,5 +483,14 @@ public class EnvironmentPromotionService {
         long modified,
         long deleted,
         long same
+    ) {}
+
+    public record EnvironmentDiff(
+        String key,
+        String sourceValue,
+        String targetValue,
+        String sourceType,
+        String targetType,
+        PromotionDiffEntity.ChangeType changeType
     ) {}
 }

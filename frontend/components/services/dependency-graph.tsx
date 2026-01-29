@@ -27,44 +27,11 @@ interface DependencyGraphProps {
 }
 
 export function DependencyGraph({ graph, isLoading }: DependencyGraphProps) {
-  if (isLoading) {
-    return (
-      <Card className="bg-terminal-surface border-terminal-border">
-        <CardHeader className="pb-3">
-          <CardTitle className="font-mono text-sm text-terminal-text flex items-center gap-2">
-            <Network className="h-4 w-4 text-terminal-green" />
-            Dependency Graph
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8 text-terminal-dim font-mono text-sm">
-            Loading graph...
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (!graph || graph.nodes.length === 0) {
-    return (
-      <Card className="bg-terminal-surface border-terminal-border">
-        <CardHeader className="pb-3">
-          <CardTitle className="font-mono text-sm text-terminal-text flex items-center gap-2">
-            <Network className="h-4 w-4 text-terminal-green" />
-            Dependency Graph
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8 text-terminal-dim font-mono text-sm">
-            No dependencies found
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Calculate node positions in a simple layered layout
   const nodePositions = useMemo(() => {
+    if (!graph || graph.nodes.length === 0) {
+      return { positions: new Map<string, { x: number; y: number; layer: number }>(), layers: [] as ServiceDependencyNode[][] };
+    }
+
     const positions = new Map<string, { x: number; y: number; layer: number }>();
     const layers: ServiceDependencyNode[][] = [];
     const processed = new Set<string>();
@@ -121,6 +88,42 @@ export function DependencyGraph({ graph, isLoading }: DependencyGraphProps) {
 
     return { positions, layers };
   }, [graph]);
+
+  if (isLoading) {
+    return (
+      <Card className="bg-terminal-surface border-terminal-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="font-mono text-sm text-terminal-text flex items-center gap-2">
+            <Network className="h-4 w-4 text-terminal-green" />
+            Dependency Graph
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8 text-terminal-dim font-mono text-sm">
+            Loading graph...
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!graph || graph.nodes.length === 0) {
+    return (
+      <Card className="bg-terminal-surface border-terminal-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="font-mono text-sm text-terminal-text flex items-center gap-2">
+            <Network className="h-4 w-4 text-terminal-green" />
+            Dependency Graph
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8 text-terminal-dim font-mono text-sm">
+            No dependencies found
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const { positions, layers } = nodePositions;
 

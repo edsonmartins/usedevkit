@@ -12,7 +12,9 @@ public record UpdateSecretCmd(
     String description,
     RotationPolicy rotationPolicy,
     String applicationId,
-    String environmentId
+    String environmentId,
+    SecretEntity.ExternalProvider externalProvider,
+    String externalSecretName
 ) {
     public UpdateSecretCmd {
         if (secretId == null || secretId.isBlank()) {

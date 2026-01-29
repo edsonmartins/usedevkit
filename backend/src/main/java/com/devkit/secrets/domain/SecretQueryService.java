@@ -1,7 +1,9 @@
 package com.devkit.secrets.domain;
 
-import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.secrets.domain.vo.SecretId;
+import com.devkit.shared.domain.ResourceNotFoundException;
+import com.devkit.applications.domain.ApplicationEncryptionKeyRepository;
+import com.devkit.shared.security.EncryptionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +20,16 @@ import java.util.stream.Collectors;
 public class SecretQueryService {
 
     private final SecretRepository secretRepository;
+    private final ApplicationEncryptionKeyRepository encryptionKeyRepository;
+    private final EncryptionService encryptionService;
 
-    SecretQueryService(SecretRepository secretRepository) {
+    SecretQueryService(
+            SecretRepository secretRepository,
+            ApplicationEncryptionKeyRepository encryptionKeyRepository,
+            EncryptionService encryptionService) {
         this.secretRepository = secretRepository;
+        this.encryptionKeyRepository = encryptionKeyRepository;
+        this.encryptionService = encryptionService;
     }
 
     /**
@@ -69,6 +78,30 @@ public class SecretQueryService {
                 .map(SecretResult::from)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Secret not found with id: " + secretId));
+    }
+
+    /**
+     * Get secret by ID with decrypted value.
+     * @param secretId the secret ID
+     * @return decrypted secret result
+     */
+    public SecretResultWithDecrypted getSecretByIdWithDecryptedValue(String secretId) {
+        var secret = secretRepository.findById(SecretId.of(secretId))
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Secret not found with id: " + secretId));
+
+        var encryptionKey = encryptionKeyRepository.findLatestActiveByApplicationId(secret.getApplicationId())
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Application encryption key not found. Please create an encryption key for this application first."));
+
+        String applicationKey = encryptionService.unwrapApplicationKey(encryptionKey.getEncryptedKey());
+        String decryptedValue = encryptionService.decryptForApp(
+            secret.getEncryptedValue(),
+            applicationKey,
+            encryptionKey.getSalt()
+        );
+
+        return SecretResultWithDecrypted.from(secret, decryptedValue);
     }
 
     /**

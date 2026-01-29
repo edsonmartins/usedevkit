@@ -1,0 +1,64 @@
+@options
+@packages
+-classpath
+'/Users/edsonmartins/.m2/repository/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0.jar:/Users/edsonmartins/.m2/repository/com/squareup/okio/okio/3.6.0/okio-3.6.0.jar:/Users/edsonmartins/.m2/repository/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0.jar:/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-common/1.9.10/kotlin-stdlib-common-1.9.10.jar:/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.21/kotlin-stdlib-jdk8-1.8.21.jar:/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib/1.8.21/kotlin-stdlib-1.8.21.jar:/Users/edsonmartins/.m2/repository/org/jetbrains/annotations/13.0/annotations-13.0.jar:/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.21/kotlin-stdlib-jdk7-1.8.21.jar:/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.16.1/jackson-databind-2.16.1.jar:/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.16.1/jackson-annotations-2.16.1.jar:/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.16.1/jackson-core-2.16.1.jar:/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.16.1/jackson-datatype-jsr310-2.16.1.jar:/Users/edsonmartins/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8.jar:/Users/edsonmartins/.m2/repository/org/checkerframework/checker-qual/3.37.0/checker-qual-3.37.0.jar:/Users/edsonmartins/.m2/repository/com/google/errorprone/error_prone_annotations/2.21.1/error_prone_annotations-2.21.1.jar:/Users/edsonmartins/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java:/Users/edsonmartins/tmp/usedevkit/sdks/java/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'DevKit Java SDK 1.0.0 API'
+-use
+-version
+-windowtitle
+'DevKit Java SDK 1.0.0 API'
+com.devkit.sdk.crypto
+com.devkit.sdk
+com.devkit.sdk.http
+com.devkit.sdk.model
+com.devkit.sdk.exception
+/Users/edsonmartins/.m2/repository/com/squareup/okhttp3/okhttp/4.12.0/okhttp-4.12.0.jar = 1697509437000
+/Users/edsonmartins/.m2/repository/com/squareup/okio/okio/3.6.0/okio-3.6.0.jar = 1696213723000
+/Users/edsonmartins/.m2/repository/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0.jar = 1696213713000
+/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-common/1.9.10/kotlin-stdlib-common-1.9.10.jar = 1692781294000
+/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.8.21/kotlin-stdlib-jdk8-1.8.21.jar = 1682396738000
+/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib/1.8.21/kotlin-stdlib-1.8.21.jar = 1682396733000
+/Users/edsonmartins/.m2/repository/org/jetbrains/annotations/13.0/annotations-13.0.jar = 1387282242000
+/Users/edsonmartins/.m2/repository/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.8.21/kotlin-stdlib-jdk7-1.8.21.jar = 1682396736000
+/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.16.1/jackson-databind-2.16.1.jar = 1703392260000
+/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.16.1/jackson-annotations-2.16.1.jar = 1703390558000
+/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.16.1/jackson-core-2.16.1.jar = 1703391250000
+/Users/edsonmartins/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.16.1/jackson-datatype-jsr310-2.16.1.jar = 1703396321000
+/Users/edsonmartins/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8.jar = 1691561613000
+/Users/edsonmartins/.m2/repository/org/checkerframework/checker-qual/3.37.0/checker-qual-3.37.0.jar = 1690910757000
+/Users/edsonmartins/.m2/repository/com/google/errorprone/error_prone_annotations/2.21.1/error_prone_annotations-2.21.1.jar = 1691185028000
+/Users/edsonmartins/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar = 1693757672000
+/Users/edsonmartins/tmp/usedevkit/sdks/java/src/main/java = 1768602870618
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/generated-sources/annotations = 1768678761370
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/tag-search-index.js = 1768678779584
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/overview-tree.html = 1768678779528
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/module-search-index.js = 1768678779581
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/index.html = 1768678779534
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/package-search-index.js = 1768678779582
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/serialized-form.html = 1768678779232
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/index-all.html = 1768678779661
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/allpackages-index.html = 1768678779580
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/member-search-index.js = 1768678779583
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/overview-summary.html = 1768678779668
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/help-doc.html = 1768678779673
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/element-list = 1768678778989
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/search.html = 1768678779664
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/allclasses-index.html = 1768678779576
+/Users/edsonmartins/tmp/usedevkit/sdks/java/target/apidocs/type-search-index.js = 1768678779582

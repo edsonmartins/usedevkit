@@ -21,6 +21,10 @@ public class SecretEntity extends BaseEntity {
         MANUAL, AUTOMATIC_30_DAYS, AUTOMATIC_60_DAYS, AUTOMATIC_90_DAYS
     }
 
+    public enum ExternalProvider {
+        AWS_SECRETS_MANAGER
+    }
+
     @EmbeddedId
     @AttributeOverride(name = "id", column = @Column(name = "id", nullable = false))
     private SecretId id;
@@ -39,6 +43,13 @@ public class SecretEntity extends BaseEntity {
 
     @Column(name = "environment_id", length = 255)
     private String environmentId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "external_provider", length = 50)
+    private ExternalProvider externalProvider;
+
+    @Column(name = "external_secret_name", length = 255)
+    private String externalSecretName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "rotation_policy", length = 30)
@@ -70,6 +81,8 @@ public class SecretEntity extends BaseEntity {
             String description,
             String applicationId,
             String environmentId,
+            ExternalProvider externalProvider,
+            String externalSecretName,
             RotationPolicy rotationPolicy) {
 
         this.id = AssertUtil.requireNotNull(id, "Secret id cannot be null");
@@ -78,6 +91,8 @@ public class SecretEntity extends BaseEntity {
         this.description = description;
         this.applicationId = AssertUtil.requireNotBlank(applicationId, "Application id cannot be null or empty");
         this.environmentId = environmentId;
+        this.externalProvider = externalProvider;
+        this.externalSecretName = externalSecretName;
         this.rotationPolicy = rotationPolicy != null ? rotationPolicy : RotationPolicy.MANUAL;
         this.isActive = true;
         this.versionNumber = 1;
@@ -90,6 +105,8 @@ public class SecretEntity extends BaseEntity {
             String description,
             String applicationId,
             String environmentId,
+            ExternalProvider externalProvider,
+            String externalSecretName,
             RotationPolicy rotationPolicy) {
 
         return new SecretEntity(
@@ -99,6 +116,8 @@ public class SecretEntity extends BaseEntity {
                 description,
                 applicationId,
                 environmentId,
+                externalProvider,
+                externalSecretName,
                 rotationPolicy
         );
     }
@@ -116,7 +135,9 @@ public class SecretEntity extends BaseEntity {
             String description,
             RotationPolicy rotationPolicy,
             String applicationId,
-            String environmentId) {
+            String environmentId,
+            ExternalProvider externalProvider,
+            String externalSecretName) {
         if (encryptedValue != null) {
             this.encryptedValue = encryptedValue;
         }
@@ -136,6 +157,14 @@ public class SecretEntity extends BaseEntity {
 
         if (environmentId != null) {
             this.environmentId = environmentId;
+        }
+
+        if (externalProvider != null) {
+            this.externalProvider = externalProvider;
+        }
+
+        if (externalSecretName != null) {
+            this.externalSecretName = externalSecretName;
         }
     }
 
@@ -188,6 +217,14 @@ public class SecretEntity extends BaseEntity {
 
     public String getEnvironmentId() {
         return environmentId;
+    }
+
+    public ExternalProvider getExternalProvider() {
+        return externalProvider;
+    }
+
+    public String getExternalSecretName() {
+        return externalSecretName;
     }
 
     public RotationPolicy getRotationPolicy() {

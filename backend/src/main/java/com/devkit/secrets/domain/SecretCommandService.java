@@ -3,6 +3,7 @@ package com.devkit.secrets.domain;
 import com.devkit.applications.domain.ApplicationEncryptionKeyRepository;
 import com.devkit.secrets.domain.events.*;
 import com.devkit.secrets.domain.vo.SecretId;
+import com.devkit.secrets.integrations.SecretExternalManager;
 import com.devkit.shared.domain.ResourceNotFoundException;
 import com.devkit.shared.domain.SpringEventPublisher;
 import com.devkit.shared.security.EncryptionService;
@@ -23,18 +24,21 @@ public class SecretCommandService {
     private final SpringEventPublisher eventPublisher;
     private final ApplicationEncryptionKeyRepository encryptionKeyRepository;
     private final EncryptionService encryptionService;
+    private final SecretExternalManager externalManager;
 
     SecretCommandService(
             SecretRepository secretRepository,
             SecretRotationRepository secretRotationRepository,
             SpringEventPublisher eventPublisher,
             ApplicationEncryptionKeyRepository encryptionKeyRepository,
-            EncryptionService encryptionService) {
+            EncryptionService encryptionService,
+            SecretExternalManager externalManager) {
         this.secretRepository = secretRepository;
         this.secretRotationRepository = secretRotationRepository;
         this.eventPublisher = eventPublisher;
         this.encryptionKeyRepository = encryptionKeyRepository;
         this.encryptionService = encryptionService;
+        this.externalManager = externalManager;
     }
 
     public String createSecret(CreateSecretCmd cmd) {
@@ -52,10 +56,13 @@ public class SecretCommandService {
                 cmd.description(),
                 cmd.applicationId(),
                 cmd.environmentId(),
+                cmd.externalProvider(),
+                cmd.externalSecretName(),
                 cmd.rotationPolicy()
         );
 
         secretRepository.save(secret);
+        externalManager.upsertSecret(secret, cmd.value(), cmd.description());
         eventPublisher.publish(new SecretCreatedEvent(
                 secret.getId().id(),
                 secret.getKey(),
@@ -80,9 +87,14 @@ public class SecretCommandService {
             cmd.description(),
             cmd.rotationPolicy(),
             cmd.applicationId(),
-            cmd.environmentId()
+            cmd.environmentId(),
+            cmd.externalProvider(),
+            cmd.externalSecretName()
         );
         secretRepository.save(secret);
+        if (cmd.value() != null) {
+            externalManager.upsertSecret(secret, cmd.value(), cmd.description());
+        }
     }
 
     public String rotateSecret(RotateSecretCmd cmd) {
@@ -92,6 +104,31 @@ public class SecretCommandService {
 
         String previousValue = secret.getEncryptedValue();
         Integer previousVersion = secret.getVersionNumber();
+        try {
+            externalManager.upsertSecret(secret, cmd.newValue(), secret.getDescription());
+        } catch (Exception e) {
+            var failureHistory = SecretRotationEntity.createFailure(
+                secret.getId().id(),
+                secret.getKey(),
+                secret.getApplicationId(),
+                secret.getEnvironmentId(),
+                secret.getVersionNumber(),
+                cmd.rotatedBy(),
+                SecretRotationEntity.RotationReason.MANUAL,
+                e.getMessage()
+            );
+            secretRotationRepository.save(failureHistory);
+            eventPublisher.publish(new SecretRotationFailedEvent(
+                secret.getId().id(),
+                secret.getKey(),
+                cmd.rotatedBy(),
+                secret.getVersionNumber(),
+                secret.getApplicationId(),
+                secret.getEnvironmentId(),
+                e.getMessage()
+            ));
+            throw e;
+        }
         String newEncryptedValue = encryptSecretValue(secret.getApplicationId(), cmd.newValue());
 
         secret.rotate(newEncryptedValue, cmd.rotatedBy());
@@ -161,6 +198,7 @@ public class SecretCommandService {
         String applicationId = secret.getApplicationId();
         String environmentId = secret.getEnvironmentId();
 
+        externalManager.deleteSecret(secret);
         secretRepository.delete(secret);
         eventPublisher.publish(new SecretDeletedEvent(
                 secretId,

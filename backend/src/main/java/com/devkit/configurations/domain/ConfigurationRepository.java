@@ -47,6 +47,8 @@ public interface ConfigurationRepository extends JpaRepository<ConfigurationEnti
             """)
     List<ConfigurationEntity> findSecretsByEnvironmentId(@Param("environmentId") String environmentId);
 
+    long countByEnvironmentId(String environmentId);
+
     default ConfigurationEntity getByEnvironmentIdAndKey(String environmentId, String key) {
         return this.findByEnvironmentIdAndKey(environmentId, key)
                 .orElseThrow(() -> new ResourceNotFoundException(

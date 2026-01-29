@@ -50,6 +50,8 @@ interface FeatureFlagRepository extends JpaRepository<FeatureFlagEntity, Feature
             """)
     List<FeatureFlagEntity> findConditionalByApplicationId(@Param("applicationId") String applicationId);
 
+    long countByApplicationIdAndIsActiveTrue(String applicationId);
+
     default FeatureFlagEntity getByApplicationIdAndKey(String applicationId, String key) {
         return this.findByApplicationIdAndKey(applicationId, key)
                 .orElseThrow(() -> new ResourceNotFoundException(

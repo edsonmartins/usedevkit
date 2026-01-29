@@ -23,6 +23,7 @@
         <jjwt.version>0.12.5</jjwt.version>
         <springdoc.version>2.3.0</springdoc.version>
         <commons-codec.version>1.16.0</commons-codec.version>
+        <aws.sdk.version>2.25.53</aws.sdk.version>
     </properties>
 
     <dependencies>
@@ -109,6 +110,13 @@
             <groupId>io.hypersistence</groupId>
             <artifactId>hypersistence-utils-hibernate-63</artifactId>
             <version>3.8.2</version>
+        </dependency>
+
+        <!-- AWS Secrets Manager -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>secretsmanager</artifactId>
+            <version>${aws.sdk.version}</version>
         </dependency>
 
         <!-- Lombok -->

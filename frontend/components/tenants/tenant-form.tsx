@@ -329,17 +329,17 @@ export function TenantUpgradeDialog({
   const [selectedPlan, setSelectedPlan] = useState<TenantPlan>(tenant?.plan || "FREE");
   const [billingEmail, setBillingEmail] = useState(tenant?.billingEmail || "");
 
-  // Don't render if tenant is not provided
-  if (!tenant) {
-    return null;
-  }
-
   useEffect(() => {
     if (open && tenant) {
       setSelectedPlan(tenant.plan || "FREE");
       setBillingEmail(tenant.billingEmail || "");
     }
   }, [open, tenant]);
+
+  // Don't render if tenant is not provided
+  if (!tenant) {
+    return null;
+  }
 
   const handleSubmit = () => {
     onSubmit({

@@ -17,6 +17,7 @@ import { EncryptionKeyManager } from "@/components/applications/encryption-key-m
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { applicationsApi } from "@/lib/api/applications";
 
 export default function ApplicationDetailPage() {
   const router = useRouter();
@@ -35,6 +36,7 @@ export default function ApplicationDetailPage() {
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const [newApiKey, setNewApiKey] = useState<{ key: string; prefix: string } | null>(null);
   const [apiKeyName, setApiKeyName] = useState("");
+  const [isCreatingApiKey, setIsCreatingApiKey] = useState(false);
   const [selectedEnvironmentId, setSelectedEnvironmentId] = useState<string | null>(null);
 
   // Update selected application in store
@@ -75,12 +77,11 @@ export default function ApplicationDetailPage() {
     if (!apiKeyName) return;
 
     try {
-      // TODO: Implement API key creation endpoint
-      // This feature is not yet implemented - requires backend API endpoint
-      toast.error(
-        "API Key creation is not yet implemented. " +
-        "Please contact your administrator to create API keys."
-      );
+      setIsCreatingApiKey(true);
+      const result = await applicationsApi.createApiKey(applicationId, { name: apiKeyName });
+      setNewApiKey({ key: result.apiKey, prefix: result.prefix });
+      setApiKeyName("");
+      toast.success("API Key created successfully");
     } catch (error) {
       console.error("Failed to create API key:", error);
       toast.error(
@@ -88,6 +89,8 @@ export default function ApplicationDetailPage() {
           ? `Failed to create API Key: ${error.message}`
           : "Failed to create API Key"
       );
+    } finally {
+      setIsCreatingApiKey(false);
     }
   };
 
@@ -327,10 +330,10 @@ export default function ApplicationDetailPage() {
                 </Button>
                 <Button
                   onClick={handleCreateApiKey}
-                  disabled={!apiKeyName || isCreatingEnv}
+                  disabled={!apiKeyName || isCreatingApiKey}
                   className="font-mono"
                 >
-                  {isCreatingEnv ? "Generating..." : "Generate"}
+                  {isCreatingApiKey ? "Generating..." : "Generate"}
                 </Button>
               </div>
             </div>
@@ -352,7 +355,7 @@ export default function ApplicationDetailPage() {
                   </Button>
                 </div>
                 <div className="text-xs text-terminal-coral mt-3">
-                  Save this key now. You won't be able to see it again!
+                  Save this key now. You won&apos;t be able to see it again!
                 </div>
               </div>
               <div className="flex justify-end">

@@ -168,4 +168,15 @@ public class FeatureFlagController {
         commandService.deleteFeatureFlag(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/archive")
+    @Operation(summary = "Archive feature flag", description = "Archives (soft deletes) a feature flag")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Feature flag archived successfully"),
+        @ApiResponse(responseCode = "404", description = "Feature flag not found")
+    })
+    ResponseEntity<Void> archiveFeatureFlag(@PathVariable String id) {
+        commandService.archiveFeatureFlag(id);
+        return ResponseEntity.ok().build();
+    }
 }

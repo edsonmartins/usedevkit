@@ -144,6 +144,10 @@ public class FeatureFlagEntity extends BaseEntity {
         this.status = FlagStatus.DISABLED;
     }
 
+    public void archive() {
+        this.isActive = false;
+    }
+
     public void updateName(String name) {
         this.name = AssertUtil.requireNotBlank(name, "Feature flag name cannot be null or empty");
     }

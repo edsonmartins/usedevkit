@@ -143,6 +143,20 @@ public class ServiceController {
         return ResponseEntity.ok(status);
     }
 
+    /**
+     * Get health check results for a service (placeholder).
+     */
+    @GetMapping("/{id}/health/results")
+    @Operation(summary = "Get health check results", description = "Returns recent health check results (placeholder)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Health check results retrieved")
+    })
+    ResponseEntity<List<HealthCheckResultDTO>> getHealthResults(
+            @PathVariable String id,
+            @RequestParam(defaultValue = "50") int limit) {
+        return ResponseEntity.ok(List.of());
+    }
+
     // ==================== Dependency Management ====================
 
     @PostMapping("/{sourceId}/dependencies/{targetId}")
@@ -183,6 +197,14 @@ public class ServiceController {
         Map<String, List<ServiceRegistry.DependencyNode>> graph = serviceRegistry.getDependencyGraph();
         return ResponseEntity.ok(graph);
     }
+
+    public record HealthCheckResultDTO(
+        String serviceId,
+        String status,
+        String timestamp,
+        Integer responseTime,
+        String message
+    ) {}
 
     @GetMapping("/{id}/dependents")
     @Operation(summary = "Get service dependents", description = "Retrieves services that depend on this service")

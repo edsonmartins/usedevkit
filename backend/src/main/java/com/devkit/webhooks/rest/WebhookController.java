@@ -96,6 +96,22 @@ public class WebhookController {
     }
 
     /**
+     * List all webhooks for an application.
+     */
+    @GetMapping("/application/{applicationId}")
+    public ResponseEntity<List<WebhookDTO>> listWebhooksByApplication(@PathVariable String applicationId) {
+        List<WebhookEntity> webhooks = webhookDeliveryService.getAllWebhooks().stream()
+            .filter(w -> applicationId.equals(w.getApplicationId()))
+            .toList();
+
+        List<WebhookDTO> dtos = webhooks.stream()
+            .map(WebhookDTO::fromEntity)
+            .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
      * Update a webhook.
      */
     @PutMapping("/{id}")
@@ -205,6 +221,15 @@ public class WebhookController {
         WebhookDeliveryService.WebhookStatsDTO stats = webhookDeliveryService.getStatistics();
 
         return ResponseEntity.ok(stats);
+    }
+
+    /**
+     * Retry a failed delivery.
+     */
+    @PostMapping("/deliveries/{id}/retry")
+    public ResponseEntity<Void> retryDelivery(@PathVariable Long id) {
+        webhookDeliveryService.retryDelivery(id);
+        return ResponseEntity.accepted().build();
     }
 
     /**

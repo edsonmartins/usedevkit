@@ -145,6 +145,40 @@ public class NotificationService {
     }
 
     /**
+     * Notify about secret rotation failure.
+     */
+    public void notifySecretRotationFailed(
+            String channel,
+            String recipient,
+            String secretKey,
+            String applicationId,
+            String environmentId,
+            String errorMessage) {
+
+        String subject = String.format("Secret Rotation Failed: %s", secretKey);
+        String message = String.format(
+            "Secret rotation failed\n" +
+            "Key: %s\n" +
+            "Application: %s\n" +
+            "Environment: %s\n" +
+            "Error: %s\n" +
+            "Time: %s",
+            secretKey,
+            applicationId,
+            environmentId,
+            errorMessage,
+            Instant.now()
+        );
+
+        sendNotification(channel, recipient, subject, message, Map.of(
+            "secretKey", secretKey,
+            "applicationId", applicationId,
+            "environmentId", environmentId,
+            "error", errorMessage
+        ));
+    }
+
+    /**
      * Notify about promotion status.
      */
     public void notifyPromotionStatus(

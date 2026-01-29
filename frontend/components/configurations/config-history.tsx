@@ -211,7 +211,7 @@ export function ConfigHistory({
                             )}
                             {version.changeReason && (
                               <span className="text-terminal-text">
-                                "{version.changeReason}"
+                                &quot;{version.changeReason}&quot;
                               </span>
                             )}
                           </div>

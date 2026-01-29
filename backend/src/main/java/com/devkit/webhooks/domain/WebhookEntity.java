@@ -26,6 +26,7 @@ public class WebhookEntity extends BaseEntity {
         CONFIG_UPDATED,
         CONFIG_DELETED,
         SECRET_ROTATED,
+        SECRET_ROTATION_FAILED,
         PROMOTION_CREATED,
         PROMOTION_APPROVED,
         PROMOTION_EXECUTED,

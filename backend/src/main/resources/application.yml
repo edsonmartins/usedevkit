@@ -83,3 +83,13 @@ devkit:
   audit:
     enabled: true
     retention-days: 90
+  secrets:
+    aws:
+      enabled: false
+      region: us-east-1
+      endpoint: ""
+  notifications:
+    secret-rotation:
+      enabled: false
+      channel: email
+      recipient: ""

@@ -112,6 +112,18 @@ public class RoleController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Clone a role.
+     * POST /api/v1/rbac/roles/{id}/clone
+     */
+    @PostMapping("/roles/{id}/clone")
+    public ResponseEntity<RoleDTO> cloneRole(
+            @PathVariable Long id,
+            @RequestBody CloneRoleDTO request) {
+        RoleEntity cloned = permissionService.cloneRole(id, request.name());
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToRoleDTO(cloned));
+    }
+
     // ==================== Permissions ====================
 
     /**
@@ -207,22 +219,36 @@ public class RoleController {
      */
     @PostMapping("/permissions/check")
     public ResponseEntity<PermissionCheckResponseDTO> checkPermission(
-            @PathVariable Long tenantId,
-            @Valid @RequestBody CheckPermissionDTO dto) {
+            @Valid @RequestBody PermissionCheckRequest dto) {
+        String resource = dto.resource();
+        String action = dto.action();
+
+        if ((resource == null || action == null) && dto.permission() != null) {
+            String[] parts = dto.permission().split("\\.|:");
+            if (parts.length >= 2) {
+                resource = parts[0];
+                action = normalizeAction(parts[1]);
+            }
+        }
+
+        if (resource == null || action == null) {
+            throw new IllegalArgumentException("resource/action or permission must be provided");
+        }
+
         boolean hasPermission = permissionService.hasPermission(
-            tenantId,
+            dto.tenantId(),
             dto.userId(),
-            dto.resource(),
-            dto.action()
+            resource,
+            normalizeAction(action)
         );
 
-        Set<String> userPermissions = permissionService.getUserPermissions(tenantId, dto.userId());
+        Set<String> userPermissions = permissionService.getUserPermissions(dto.tenantId(), dto.userId());
 
         PermissionCheckResponseDTO response = new PermissionCheckResponseDTO(
             hasPermission,
             dto.userId(),
-            dto.resource(),
-            dto.action(),
+            resource,
+            normalizeAction(action),
             userPermissions,
             userPermissions.size()
         );
@@ -251,6 +277,25 @@ public class RoleController {
         permissionService.initializeSystemPermissionsAndRoles();
         return ResponseEntity.ok().build();
     }
+
+    private String normalizeAction(String action) {
+        if (action == null) return null;
+        return switch (action) {
+            case "view" -> "read";
+            case "toggle", "activate", "deactivate", "rollback", "history", "execute" -> "manage";
+            case "decrypt" -> "read";
+            case "create", "update", "delete", "read", "write", "manage", "rotate", "invite" -> action;
+            default -> action;
+        };
+    }
+
+    record PermissionCheckRequest(
+        Long tenantId,
+        String userId,
+        String resource,
+        String action,
+        String permission
+    ) {}
 
     // ==================== Helper Methods ====================
 
@@ -284,4 +329,6 @@ public class RoleController {
             entity.getCreatedAt()
         );
     }
+
+    record CloneRoleDTO(String name) {}
 }

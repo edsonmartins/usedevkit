@@ -1,5 +1,6 @@
 package com.devkit.secrets.rest;
 
+import com.devkit.secrets.domain.SecretEntity.ExternalProvider;
 import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 import com.devkit.secrets.domain.SecretResult;
 
@@ -14,6 +15,8 @@ public record SecretResponse(
     String description,
     String applicationId,
     String environmentId,
+    ExternalProvider externalProvider,
+    String externalSecretName,
     RotationPolicy rotationPolicy,
     Instant lastRotationDate,
     Instant nextRotationDate,
@@ -29,6 +32,8 @@ public record SecretResponse(
             result.description(),
             result.applicationId(),
             result.environmentId(),
+            result.externalProvider(),
+            result.externalSecretName(),
             result.rotationPolicy(),
             result.lastRotationDate(),
             result.nextRotationDate(),

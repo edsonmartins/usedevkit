@@ -166,4 +166,49 @@ public class ConfigurationController {
         commandService.deleteConfiguration(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Bulk create/update configurations for an environment.
+     */
+    @PostMapping("/bulk")
+    @Operation(summary = "Bulk upsert configurations", description = "Creates or updates multiple configurations in one request")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Configurations upserted successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
+    ResponseEntity<List<ConfigurationResponse>> bulkUpsert(@Valid @RequestBody BulkUpsertRequest request) {
+        List<CreateConfigurationCmd> cmds = request.configurations().stream()
+            .map(cfg -> new CreateConfigurationCmd(
+                cfg.key(),
+                cfg.value(),
+                cfg.type(),
+                cfg.description(),
+                cfg.sensitive(),
+                request.environmentId()
+            ))
+            .toList();
+
+        commandService.bulkUpsertConfigurations(request.environmentId(), cmds);
+
+        var configurations = queryService.getConfigurationsByEnvironment(request.environmentId());
+        var responses = configurations.stream()
+            .map(ConfigurationResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(responses);
+    }
+
+    record BulkUpsertRequest(
+        String applicationId,
+        String environmentId,
+        List<BulkConfigurationItem> configurations
+    ) {}
+
+    record BulkConfigurationItem(
+        String key,
+        String value,
+        String type,
+        String description,
+        Boolean sensitive
+    ) {}
 }

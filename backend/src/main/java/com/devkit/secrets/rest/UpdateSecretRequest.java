@@ -1,5 +1,6 @@
 package com.devkit.secrets.rest;
 
+import com.devkit.secrets.domain.SecretEntity.ExternalProvider;
 import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 
 /**
@@ -11,6 +12,8 @@ public record UpdateSecretRequest(
     String description,
     RotationPolicy rotationPolicy,
     String applicationId,
-    String environmentId
+    String environmentId,
+    ExternalProvider externalProvider,
+    String externalSecretName
 ) {
 }

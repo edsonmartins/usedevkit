@@ -218,6 +218,20 @@ public class PermissionService {
         logger.info("Deleted role {}", roleId);
     }
 
+    /**
+     * Clone a role with a new name.
+     */
+    public RoleEntity cloneRole(Long roleId, String name) {
+        RoleEntity source = getRole(roleId);
+        RoleEntity clone = RoleEntity.createCustomRole(name, source.getDescription(), source.getTenantId());
+
+        source.getPermissions().forEach(clone::addPermission);
+
+        RoleEntity saved = roleRepository.save(clone);
+        logger.info("Cloned role {} to {}", roleId, name);
+        return saved;
+    }
+
     // ==================== Permission Management ====================
 
     /**

@@ -1,5 +1,6 @@
 package com.devkit.secrets.rest;
 
+import com.devkit.secrets.domain.SecretEntity.ExternalProvider;
 import com.devkit.secrets.domain.SecretEntity.RotationPolicy;
 import jakarta.validation.constraints.NotBlank;
 
@@ -20,6 +21,10 @@ public record CreateSecretRequest(
     String applicationId,
 
     String environmentId,
+
+    ExternalProvider externalProvider,
+
+    String externalSecretName,
 
     RotationPolicy rotationPolicy
 ) {

@@ -27,6 +27,10 @@ public interface SecretRepository extends JpaRepository<SecretEntity, SecretId> 
 
     List<SecretEntity> findByIsActiveTrue();
 
+    long countByIsActiveTrue();
+
+    long countByEnvironmentIdAndIsActiveTrue(String environmentId);
+
     @Query("""
             SELECT s FROM SecretEntity s
             WHERE s.applicationId = :applicationId

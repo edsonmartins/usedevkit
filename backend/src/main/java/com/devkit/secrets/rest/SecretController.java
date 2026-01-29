@@ -24,12 +24,15 @@ public class SecretController {
 
     private final SecretCommandService commandService;
     private final SecretQueryService queryService;
+    private final SecretRepository secretRepository;
 
     SecretController(
             SecretCommandService commandService,
-            SecretQueryService queryService) {
+            SecretQueryService queryService,
+            SecretRepository secretRepository) {
         this.commandService = commandService;
         this.queryService = queryService;
+        this.secretRepository = secretRepository;
     }
 
     @PostMapping
@@ -45,6 +48,8 @@ public class SecretController {
             request.description(),
             request.applicationId(),
             request.environmentId(),
+            request.externalProvider(),
+            request.externalSecretName(),
             request.rotationPolicy()
         );
 
@@ -123,6 +128,17 @@ public class SecretController {
         return ResponseEntity.ok(SecretResponse.from(result));
     }
 
+    @GetMapping("/{id}/decrypt")
+    @Operation(summary = "Get secret with decrypted value", description = "Retrieves a secret with decrypted value for UI display")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Secret retrieved successfully"),
+        @ApiResponse(responseCode = "404", description = "Secret not found")
+    })
+    ResponseEntity<SecretResponseWithDecrypted> getSecretDecrypted(@PathVariable String id) {
+        var result = queryService.getSecretByIdWithDecryptedValue(id);
+        return ResponseEntity.ok(SecretResponseWithDecrypted.from(result));
+    }
+
     @PostMapping("/{id}/rotate")
     @Operation(summary = "Rotate a secret", description = "Rotates a secret with a new value. The value will be encrypted server-side using the application's encryption key.")
     @ApiResponses(value = {
@@ -156,7 +172,9 @@ public class SecretController {
             request.description(),
             request.rotationPolicy(),
             request.applicationId(),
-            request.environmentId()
+            request.environmentId(),
+            request.externalProvider(),
+            request.externalSecretName()
         );
         commandService.updateSecret(cmd);
         var result = queryService.getSecretById(id);
@@ -185,4 +203,25 @@ public class SecretController {
         commandService.deleteSecret(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/stats")
+    @Operation(summary = "Get secret statistics", description = "Retrieves statistics about secrets")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Statistics retrieved successfully")
+    })
+    ResponseEntity<SecretStatsResponse> getSecretStats() {
+        long total = secretRepository.count();
+        long active = secretRepository.countByIsActiveTrue();
+        long rotationPending = secretRepository.findSecretsNeedingRotation().size();
+        long expired = 0;
+
+        return ResponseEntity.ok(new SecretStatsResponse(total, active, rotationPending, expired));
+    }
+
+    record SecretStatsResponse(
+        long total,
+        long active,
+        long rotationPending,
+        long expired
+    ) {}
 }
